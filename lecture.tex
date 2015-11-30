@@ -1,0 +1,80 @@
+% !TeX program = xelatex
+% !TeX spellcheck = de_DE
+\documentclass{beamer}
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\usepackage[notocbib]{apacite}
+\usepackage{hyperref}
+\usepackage{xspace}
+\usepackage{array}
+\usepackage{fontawesome}
+
+\setsansfont{Calibri}
+\setdefaultlanguage{german}
+\usetheme{UHH}
+
+\def\authors#1#2{\author[#1]{#2}}
+\def\email#1{\texttt{#1}}
+\input{tex/Meta}
+\date{16. Januar 2016}
+\titlegraphic{\includegraphics[width=3cm]{img/uhh.pdf}}
+
+\renewcommand{\APACrefauthstyle}{\bfseries}
+\setcounter{tocdepth}{1}
+\def\tocname{Gliederung des Vortrags}
+\AtBeginSection{\frame{\frametitle{\tocname}\tableofcontents[currentsection]}}
+
+\newcolumntype{x}[1]{>{\centering\arraybackslash}m{#1}}
+\setbeamertemplate{headline}[default]
+
+\defbeamertemplate*{title page}{customized}[1][]
+{
+	{\color{leuchtrot}
+	\usebeamerfont{title}\centering\inserttitle\par
+	\centering\usebeamerfont{subtitle}\insertsubtitle\par}
+	\bigskip
+	\centering\usebeamerfont{author}\insertauthor\par
+	\bigskip
+	\usebeamerfont{institute}\insertinstitute\par
+	\bigskip
+	\usebeamerfont{date}\insertdate\par
+}
+
+\begin{document}
+
+\fontsize{14pt}{14pt}
+	
+% Titelfolie
+{\setbeamercolor{title page}{bg=leuchtrot}
+\begin{frame}%
+	\titlepage
+\end{frame}}
+
+% Gliederung
+\begin{frame}{\tocname}
+	\tableofcontents
+\end{frame}
+
+\section{Einführung}
+\section{Microservice-Architekturen und Sicherheit}
+\section{Kommunikation und Sicherheit}
+\section{Schutzziele}
+\section{Zusammenfassung}
+
+% Literatur
+\section{\bibname}
+\begin{frame}[allowframebreaks]{\bibname}
+	\AtBeginSection{}
+	\nocite{*}
+	\bibliographystyle{apacite}
+	\bibliography{bib}
+\end{frame}
+\begin{frame}[allowframebreaks]{Bildquellen}
+	\begin{itemize}
+		\item \url{}
+	\end{itemize}
+\end{frame}
+
+\section{Demo und Diskussion}
+
+\end{document}

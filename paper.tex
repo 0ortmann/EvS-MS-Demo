@@ -1,0 +1,72 @@
+% !TeX spellcheck=de_DE
+% !TeX program=xelatex
+\documentclass[oribibl,utf8]{llncs}
+\usepackage{hyperref}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage{fontenc}
+\usepackage[notocbib]{apacite}
+\usepackage{array}
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage[a4paper, hmargin=2.5cm, vmargin=2.0cm]{geometry}
+\usepackage{enumerate}
+\usepackage{xspace}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumerate}
+\usepackage{fontawesome}
+\usepackage{subfigure}
+\usepackage{wrapfig}
+\def\authors#1#2{\authorrunning{#1}\author{#2}}
+\input{tex/Meta}
+
+\newcolumntype{x}[1]{>{\centering\arraybackslash}m{#1}}
+
+\def\calibri#1{\begingroup\fontspec{Calibri}\selectfont#1\endgroup}
+
+\newcommand{\subfigureautorefname}{Abb.}
+\renewcommand{\figureautorefname}{Abbildung}
+\renewcommand{\sectionautorefname}{Abschnitt}
+\renewcommand{\subsectionautorefname}{Unterabschnitt}
+
+\linespread{1.1}
+
+\usepackage{scrpage2}
+\pagestyle{scrheadings}
+\clearscrheadings
+\ofoot{\pagemark}
+
+\begin{document}
+\maketitle
+\begingroup
+\let\oldclearpage\clearpage
+\let\clearpage\relax
+
+\begin{abstract}
+	% Motivation
+
+	
+	% Zu lösendes Problem
+
+	
+	% Lösungsansatz
+
+	
+	% Ergebnisse
+
+\end{abstract}
+
+\include{tex/einfuehrung}
+\include{tex/architektur}
+\include{tex/kommunikation}
+\include{tex/schutzziele}
+\include{tex/zusammenfassung}
+
+
+\nocite{*}
+\bibliographystyle{apacite}
+\bibliography{bib}
+
+\endgroup
+\end{document}
