@@ -1,1 +1,29 @@
 \section{Schutzziele}
+Nachdem wir bisher auf die Architektur und die Kommunikation von Microservices eingegangen sind, betrachten wir im folgenden Abschnitt Angriffspunkte einer solchen Infrastruktur. Explizit werden drei Schutzziele der Informationssicherheit betrachtet, welche eine besondere Relevanz in verteilten Systemen spielen. Zunächst gehen wir auf das der Vertraulichkeit in \autoref{subsec:vertraulichkeit} ein. Weitergehend setzt sich \autoref{subsec:verfügbarkeit} mit der Verfügbarkeit und zuletzt \autoref{subsec:integritaet} mit der Integrität von Informationen innerhalb eines Microservice-Netzwerks auseinander.
+
+
+\subsection{Vertraulichkeit}
+\label{subsec:vertraulichkeit}
+„Informationsvertraulichkeit ist bei einem IT-System gewährleistet, wenn die darin enthaltenen Informationen nur Befugten zugänglich sind. Dies bedeutet, dass die sicherheitsrelevanten Elemente nur einem definierten Personenkreis bekannt werden. Dazu sind Maßnahmen zur Festlegung sowie zur Kontrolle zulässiger Informationsflüsse zwischen den Subjekten des Systems nötig (Zugriffsschutz und Zugriffsrechte), sodass ausgeschlossen werden kann, dass Informationen zu unautorisierten Subjekten ‚durchsickern‘.“ \cite{Bedner+10}
+
+\subsubsection{Handshake-basierte Authentifikation}
+
+\subsubsection{Token-basierte Authentifikation}
+
+
+\subsection{Verfügbarkeit}
+\label{subsec:verfügbarkeit}
+„Die Verfügbarkeit betrifft sowohl informationstechnische Systeme als auch die darin verarbeiteten Daten und bedeutet, dass die Systeme jederzeit betriebsbereit sind und auf die Daten wie vorgesehen zugegriffen werden kann. Zum einen muss die Datenverarbeitung inhaltlich korrekt sein und zum anderen müssen alle Informationen und Daten zeitgerecht zur Verfügung stehen und ordnungsgemäß verarbeitet werden.“ \cite{Bedner+10}
+
+\subsubsection{Redundanz und Lastverteilung}
+
+\subsubsection{Client-seitige Lastverteilung}
+
+\subsubsection{Kontinuierliches und unabhängiges Deployment}
+
+
+\subsection{Integrität}
+\label{subsec:integritaet}
+„Integrität oder Unversehrtheit bedeutet zweierlei, nämlich die Vollständigkeit und Korrektheit der Daten (Datenintegrität) und die korrekte Funktionsweise des Systems (Systemintegrität). Vollständig bedeutet, dass alle Teile der Information verfügbar sind. Korrekt sind Daten, wenn sie den bezeichneten Sachverhalt unverfälscht wiedergeben. Die Integrität bedeutet, dass Daten im Laufe der Verarbeitung oder Übertragung mittels des Systems nicht beschädigt oder durch Nichtberechtigte unbefugt verändert werden können. Beschädigungs- oder Veränderungsmöglichkeiten sind das Ersetzen, Einfügen und Löschen von Daten oder Teilen davon.“ \cite{Bedner+10}
+
+\subsubsection{Verschlüsselungsverfahren}
