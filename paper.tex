@@ -1,11 +1,11 @@
 % !TeX spellcheck=de_DE
 % !TeX program=xelatex
-\documentclass[oribibl,utf8]{llncs}
+\documentclass[12pt]{article}
+\PassOptionsToPackage{hyphens}{url}
+\usepackage{newclude}
 \usepackage{hyperref}
-\usepackage[ngerman]{babel}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-%\usepackage{fontenc}
+\usepackage{polyglossia}
+\usepackage{fontspec}
 \usepackage[notocbib]{apacite}
 \usepackage{array}
 \usepackage{amsmath, amsfonts, amssymb}
@@ -19,8 +19,17 @@
 \usepackage{subfigure}
 \usepackage{wrapfig}
 \usepackage{todonotes}
+\usepackage{titlesec}
+\usepackage{scrpage2}
 
-\def\authors#1#2{\authorrunning{#1}\author{#2}}
+\setmainlanguage{german}
+
+\makeatletter
+\def\email#1{{\tt#1}}
+\def\subtitle#1{\gdef\@subtitle{#1}}
+\def\institute#1{\gdef\@institute{#1}}
+\def\authors#1#2{\author{#2}}
+\makeatother
 \input{tex/Meta}
 
 \newcolumntype{x}[1]{>{\centering\arraybackslash}m{#1}}
@@ -34,17 +43,44 @@
 
 \linespread{1.1}
 
-\usepackage{scrpage2}
 \pagestyle{scrheadings}
 \clearscrheadings
 \ofoot{\pagemark}
 
-\begin{document}
-\maketitle
-\begingroup
-\let\oldclearpage\clearpage
-\let\clearpage\relax
+\titleformat{\section}[hang]{\fontsize{16pt}{16pt}\selectfont\bf}{\thesection\quad}{0pt}{}{}
+\titlespacing*{\section}{0pt}{24pt}{6pt}
+\titleformat{\subsection}[hang]{\fontsize{14pt}{14pt}\selectfont\bf}{\thesubsection\quad}{0pt}{}{}
+\titlespacing*{\subsection}{0pt}{18pt}{6pt}
+\titleformat{\subsubsection}[hang]{\fontsize{12pt}{12pt}\selectfont\bf}{\thesubsubsection\quad}{0pt}{}{}
+\titlespacing*{\subsubsection}{0pt}{12pt}{6pt}
 
+\begin{document}
+\urlstyle{same}
+	
+\makeatletter
+\def\@maketitle{%
+	\newpage
+	\null
+	\vskip 2em%
+	\begin{center}%
+		\let \footnote \thanks
+		{\LARGE\bfseries \@title \par}%
+		\vskip .5em%
+		{\Large \@subtitle \par}%
+		\vskip 1.5em%
+		{\large
+			\lineskip .5em%
+			\begin{tabular}[t]{c}%
+				\@author
+			\end{tabular}\par}%
+		\vskip 1em%
+		{\large \@date}%
+	\end{center}%
+	\par
+	\vskip 1.5em}
+\makeatother
+
+\maketitle
 \begin{abstract}
 	% Motivation
 	Mit der stetig zunehmenden Diversifikation von Informationssystemen im Internet ist ein Bedarf für eine verteilte und skalierbare Architektur aufgekommen. So entstand etwa der neue Trend zur Microservice-Infrastruktur.
@@ -56,16 +92,14 @@
 	Es wird gezeigt, dass es bereits Möglichkeiten und neuartige Technologie gibt um sich vor Angriffen zu schützen.
 \end{abstract}
 
-\include{tex/einfuehrung}
-\include{tex/architektur}
-\include{tex/kommunikation}
-\include{tex/schutzziele}
-\include{tex/zusammenfassung}
+\include*{tex/einfuehrung}
+\include*{tex/architektur}
+\include*{tex/kommunikation}
+\include*{tex/schutzziele}
+\include*{tex/zusammenfassung}
 
 
 \nocite{*}
 \bibliographystyle{apacite}
 \bibliography{bib}
-
-\endgroup
 \end{document}
