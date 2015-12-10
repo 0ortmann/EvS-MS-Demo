@@ -1,1 +1,14 @@
 \section{Kommunikation und Sicherheit}
+
+Wie in Kapitel \ref{sec:ms-arch-sec} beschrieben, besteht ein Microservice-basiertes System aus einer Menge von mindestens einem physikalischen Host und beliebig vielen Microservices. Um überhaupt von einem System sprechen zu können, müssen die einzelnen Komponenten noch vernetzt werden. Dazu benutzen wir im Folgenden den Ausdurck \textit{Service-to-Service-Kommunikation} -- StS-Kommunikation. Services kommunizieren miteinander, tauschen Nachrichten aus, fordern Dinge an die von einem anderen Service berechnet werden müssen etc \cite{newman2015}. Diese Kommunikation kann angegriffen werden, insbesondere wenn die Kommunikation über unsichere Kanäle stattfindet wie etwa das World-Wide-Web.
+
+Im Folgenden wollen wir verschiedene Möglichkeiten von \stscom\ erläutern, Vor- und Nachteile diskutieren und auf Sicherheitsaspekte eingehen.
+
+\subsection{Kommunikationswege}
+
+Es gitb verschiedene klassische Ansätze, Software-Komponenten oder Services miteinander kommunizieren zu lassen.
+
+
+\subsection{Zusammenfassung}
+
+In diesem Kapitel haben wir verschiedene Möglichkeiten zur \stscom\ aufgezeigt. Dabei wurden insbesondere REST und Message-Queues betrachtet. Mögliche Schwachstellen bei der \stscom\ wurden herausgestellt und der Bedarf nach applikationsseitigem Schutz wurde deutlich gemacht. Im Folgenden werden wir Schutzziele definieren und auf Systeme sowie auf Kommunikation übertragen. Es werden einige konkrete Verfahren und Bibliotheken vorstellen, mit denen sich diese Schutzziele umsetzen lassen. 
