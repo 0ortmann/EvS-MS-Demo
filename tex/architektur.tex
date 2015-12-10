@@ -58,3 +58,10 @@ Im Folgenden stellen wir kurz das Open-Source-Projekt \textit{Kubernetes} vor. E
 
 \subsubsection{Kubernetes}
 Es gibt viel Bewegung im Feld um Microservices und Docker. Viele großangelegte Projekte, getrieben durch führende Software-Konzerne\footnote{Kubernetes//Google: \url{http://kubernetes.io}, Mesos//Apache: \url{http://mesos.apache.org}, Azure//Microsoft: \url{http://azure.microsoft.com}, ECS//Amazon: \url{https://aws.amazon.com/de/ecs/}} nehmen maßgeblich Einfluss auf die Softwareentwicklung in diesem Gebiet. Kubernetes, eines dieser Projekte ist eine opensource Software, gestartet von Google und wird von einer wachsenden Community weiter vorangebracht.
+\begin{center}
+    \textit{\glqq Kubernetes is an open-source platform for automating deployment, scaling, and operations of application containers across clusters of hosts.\grqq\cite{k8sdoc}}
+\end{center}
+Kubernetes bietet eine Menge von grundlegenden Abstraktionen und Konzepten, die bei der Entwicklung von Microservice-Systemen hilfreich sind. Der Begriff \glqq Microservice\grqq \ wird im Folgenden mit \glqq Container\grqq \ gleichgesetzt. Ein Container beschreibt die Abstraktion eines Microervices in Form einer isoliert ausführbaren, autonomen Software Einheit.
+
+Kubernetes erstrekt sich als transparent verteiltes System über eine Gruppe von physikalischen Maschinen (\textit{Nodes}). Sämtliche Resourcen, so wie etwa CPU und Memory werden transparent für das Gesamtsystem nutzbar.
+Container werden in Kubernetes als Gruppen bestehend aus mindestens einem Container betrachtet; diese Abstraktion nennt sich \textit{Pod}. Ein Pod abstrahiert einen logischen \glqq Host\grqq \ für Container. Alle Container innerhalb eines Pods laufen auf der gleichen Node und teilen sich ihr Schicksal \cite{k8sdoc}.
