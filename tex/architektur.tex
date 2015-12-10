@@ -1,4 +1,5 @@
 \section{Microservice-Architekturen und Sicherheit}
+\label{sec:ms-arch-sec}
 
 Ein Microservice-basiertes System ist ein verteiltes System, das in der Regel auf mehreren Maschinen läuft. Auf jeder dieser Maschine laufen ein oder mehrere Microservices. Dabei dürfen Services sich während des Ausführungszeit nicht gegenseitig beeinflussen. Viele Teile des Systems müssen kommunizieren, entweder es werden Nachrichten bzw. Tasks entgegen genommen oder Nachrichten verschickt \cite{newman2015}. Ein breiter Angriffsvektor entsteht.
 
@@ -93,3 +94,9 @@ Durch den Einsatz eines Systems wie Kubernetes werden viele (nicht alle) sicherh
 Das böswillige Manipulieren von Anwendungen ist noch schwieriger und nur möglich, wenn der umgebende Container einer Anwendung manipuliert werden kann. Um einen Container zu manipulieren muss zunächst der entsprechende Pod lokalisiert und inflitriert werden; wenn ein Angreifer die Container-Ebene erreicht hat, müssen immer noch die Isolationsmechanismen von Docker üerwunden werden. 
 
 Die Konfiguration und Manipulation von Kubernetes Resourcen ist geschützt durch Authentifikation via OAuth und SSH. Ferner ist es zu empfehlen, den Zugriff auf Schnittstellen zu Kubernetes durch eine Firewall zu schützen, sodass nur vertrauenswürdige Personen am System arbeiten dürfen. In einem Produktionssystem könnte man beispielsweise den Zugriff auf ein Kubernetes Cluster mit einer Firewall schützen, die nur die IP Adressen des Entwickler-Büros durchlässt. Jeder Entwickler wiederum muss sich per OAuth oder SSH authentizieren.
+
+\subsection{Zusammenfassung}
+
+In Kapitel \ref{sec:ms-arch-sec} wurden Technologien präsentiert, um Microservices umzusetzen und zu kapseln. Dabei wurden virtuelle Maschinen und Container vorgestellt und verglichen. Beide Konzepte bieten Mechanismen zur Isolation von Anwendungen. Weiterhin wurde eine Anforderungsanalyse an ein Microservice-basiertes System aufgestellt. Aufgrund der Aktualität wurde Kubernetes als mögliche Abstraktion eines solchen Systems ausgewählt und vorgestellt. Konzepte zur Replizierung, Skalierung und Balancing von und zwischen Containern wurden diskutiert. Sicherheitsfragen wurden formuliert und beantwortet. Dabei lag der Fokus im Speziellen auf dem Schutz des Gesamtsystems.
+
+Im folgenden Kapitel betrachten wir ein verallgemeinertes Microservice-System und heben die Spezifikation und den Schutz der Kommunikationswege zwischen Microservices in der Vordergrund.  
