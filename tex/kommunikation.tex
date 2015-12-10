@@ -6,9 +6,12 @@ Im Folgenden wollen wir verschiedene Möglichkeiten von \stscom\ erläutern, Vor
 
 \subsection{Kommunikationswege}
 
-Es gitb verschiedene klassische Ansätze, Software-Komponenten oder Services miteinander kommunizieren zu lassen.
+Kommunikation zwischen Microservices findet fast immer event basiert statt. Die Eventverarbeitung kann synchron oder asynchron stattfinden \cite{newman2015}. Dadurch, dass Microservices immer genau eine logische Aufgabe erfüllen, werden sie meist von extern dazu angestoßen etwas zu verarbeiten (\textit{receive-event}). Wenn ein Microservice etwas verarbeitet hat, dann gibt er entweder das Ergebnis zurück oder verschickt eine Nachricht, dass nun ein Ergebnis vorliegt (\textit{send-event}). „Applications built from microservices aim to be as decoupled and as cohesive as possible [...] receiving a request, applying logic as appropriate and producing a response“ \cite{Fowler+14}. Wir werden dies an den zwei populärsten Verfahren zur \stscom\ erläutern: Messages Queues und REST \cite{newman2015}.
 
+\subsubsection{Message Queues}
+
+\subsubsection{REST}
 
 \subsection{Zusammenfassung}
 
-In diesem Kapitel haben wir verschiedene Möglichkeiten zur \stscom\ aufgezeigt. Dabei wurden insbesondere REST und Message-Queues betrachtet. Mögliche Schwachstellen bei der \stscom\ wurden herausgestellt und der Bedarf nach applikationsseitigem Schutz wurde deutlich gemacht. Im Folgenden werden wir Schutzziele definieren und auf Systeme sowie auf Kommunikation übertragen. Es werden einige konkrete Verfahren und Bibliotheken vorstellen, mit denen sich diese Schutzziele umsetzen lassen. 
+In diesem Kapitel haben wir verschiedene Möglichkeiten zur \stscom\ aufgezeigt. Dabei wurden insbesondere REST und Message-Queues betrachtet. Mögliche Schwachstellen bei der \stscom\ wurden herausgestellt und der Bedarf nach applikationsseitigem Schutz wurde deutlich gemacht. Im Folgenden werden wir Schutzziele definieren und auf Microservice-Systeme sowie auf Kommunikation übertragen. Es werden einige konkrete Verfahren und Bibliotheken vorstellen, mit denen sich diese Schutzziele umsetzen lassen. 
