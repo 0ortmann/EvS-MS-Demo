@@ -1,0 +1,27 @@
+.app {
+  width: 95%;
+  border: 1px solid black;
+  overflow: hidden;
+  /* will contain if #first is longer than #second */ }
+.editForm {
+  border: 1px solid green;
+  overflow: hidden; }
+.expensesItem {
+  border-radius: 15px;
+  background-color: #deebed;
+  padding: 7px;
+  margin-top: 25px;
+  width: 200px;
+  overflow: hidden; }
+
+.deleteButton {
+  float: right; }
+.expensesDiv {
+  width: 55%;
+  float: left;
+  border: 1px solid red; }
+
+.expensesItemList {
+  list-style-type: none; }
+
+/*# sourceMappingURL=bundle.css.map*/
