@@ -1,16 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Module:
-=======
-Bildverarbeitung 1
-
-Exercise:
-=========
-E05 - Image Compression and Segmentation
-
 Authors:
 ========
-Dobert, Tim         (6427948)
 Möllers, Konstantin (6313136)
 
 """
@@ -22,36 +13,6 @@ import math
 from numpy import linalg as la
 from scipy import misc
 from scipy.signal import convolve2d
-
-
-def eigenvector_matrix(matrix, dims):
-    """
-    Calculates a matrix of eigenvectors with
-    the `dim`-highest eigenvalues.
-    :param matrix: Input matrix to calculate eigenvectors from.
-    :param dims: Number of dimensions to compute.
-    :return: Matrix with `dim` rows.
-    """
-    width, width = matrix.shape
-    ew, ev = la.eig(matrix)
-
-    # Get arguments of eigenvalues in descending order
-    sorted_args = np.argsort(ew)[::-1]
-
-    result = np.zeros((dims, width))
-    for i in range(dims):
-        arg = sorted_args[i]
-        result[i] = ev[:, arg].T
-
-    return result
-
-
-def mse(matrix_a, matrix_b):
-    """
-    Calculates the minimum squared error (MSE) of two matrices.
-    """
-    return ((matrix_a - matrix_b) ** 2).mean(axis=None)
-
 
 def hue_to_rgb(hue, saturation=1, alpha=1):
     """
@@ -312,36 +273,10 @@ class Image:
         return result
 
 if __name__ == '__main__':
-    # Exercise 2.1a)
-    print('EXERCISE 2.1')
-    print('============')
 
-    # covariance matrix V, taken from the exercise.
-    covariance_matrix = 0.25 * np.matrix([
-        [  15,  5,  9,  3],
-        [   5, 15,  3,  9],
-        [   9,  3, 15,  5],
-        [   3,  9,  5, 15],
-    ])
-
-    # A is the matrix of three eigenvectors of V wit highest eigenvalues
-    A = eigenvector_matrix(covariance_matrix, 3)
-
-    # Exercise 2.1b)
-    x = np.array([
-        [1, 2],
-        [3, 4],
-    ])
-    error = mse(x, np.dot(np.dot(A.T, A), x.reshape(4)).reshape((2, 2)))
-    print("A3 = ", A)
-    print("Error = ", error)
-
-    # Exercise 2.2a)
-    print('EXERCISE 2.2')
-    print('============')
-    # lena = Image.from_lena()
-    # lena.save("lena.png")
-    lena = Image.from_file("laura.jpg")
+    lena = Image.from_lena()
+    lena.save("lena.png")
+    #lena = Image.from_file("laura.jpg")
 
     print('Applying Robert\'s Cross operator ...'),
     lena.roberts_cross()
