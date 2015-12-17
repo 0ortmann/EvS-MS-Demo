@@ -36,3 +36,4 @@
 *.xdy
 *.tdo
 src/microservice1/img
+src/microservice1/__pycache__
