@@ -45,12 +45,12 @@ def sendToStorage(imagename, operation):
     name, format = imagename.split('.')
 
 
-    images = {'combined': (open('img/' + operation + '_combined.' + format, 'rb'), 'image/png'),
-            'directions': (open('img/' + operation + '_directions.' + format, 'rb'), 'image/png'),
-            'imag': (open('img/' + operation + '_imag.' + format, 'rb'), 'image/png'),
-            'magnitudes': (open('img/' + operation + '_magnitudes.' + format, 'rb'), 'image/png'),
-            'real': (open('img/' + operation + '_real.' + format, 'rb'), 'image/png'), 
-            'original_image': (open(imagename, 'rb'), 'image/png')}
+    images = [('combined', ('combined.png', open('img/' + operation + '_combined.' + format, 'rb'), 'image/png')),
+            ('directions', ('directions.png', open('img/' + operation + '_directions.' + format, 'rb'), 'image/png')),
+            ('imag', ('imag.png', open('img/' + operation + '_imag.' + format, 'rb'), 'image/png')),
+            ('magnitudes', ('magnitudes.png', open('img/' + operation + '_magnitudes.' + format, 'rb'), 'image/png')),
+            ('real', ('real.png', open('img/' + operation + '_real.' + format, 'rb'), 'image/png')), 
+            ('original_image', ('original_image', open(imagename, 'rb')))]
     send('http://localhost:1337/images', files=images, data={'operator': operation, 'name': imagename})
     
 @app.route('/process/<operation>', methods=['POST'])
