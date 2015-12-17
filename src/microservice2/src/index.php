@@ -8,7 +8,6 @@ use Silex\Provider\FormServiceProvider;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,8 +37,16 @@ class ImageData {
     public $original_image;
     /** @var string */
     public $operator;
-    /** @var \Symfony\Component\HttpFoundation\File\UploadedFile[] */
-    public $images;
+    /** @var \Symfony\Component\HttpFoundation\File\UploadedFile */
+    public $combined;
+    /** @var \Symfony\Component\HttpFoundation\File\UploadedFile */
+    public $directions;
+    /** @var \Symfony\Component\HttpFoundation\File\UploadedFile */
+    public $imag;
+    /** @var \Symfony\Component\HttpFoundation\File\UploadedFile */
+    public $real;
+    /** @var \Symfony\Component\HttpFoundation\File\UploadedFile */
+    public $magnitudes;
 }
 
 /** @var \Symfony\Component\Form\FormFactory $formFactory */
@@ -49,7 +56,11 @@ $imageForm = $formFactory
     ->add('name', TextType::class)
     ->add('original_image', FileType::class)
     ->add('operator', TextType::class)
-    ->add('images', FileType::class, ['multiple' => true])
+    ->add('combined', FileType::class)
+    ->add('directions', FileType::class)
+    ->add('imag', FileType::class)
+    ->add('real', FileType::class)
+    ->add('magnitudes', FileType::class)
     ->getForm();
 
 $app->get('/images', function() use($app, $images) {
@@ -93,13 +104,22 @@ $app->post('/images', function (Request $request) use($images, $imageForm, $grid
     $data = $imageForm->getData();
 
     $id = $gridfs->storeFile($data->original_image->getPathname(), ['filename' => $data->original_image->getClientOriginalName(), 'contentType' => $data->original_image->getClientMimeType()]);
+    $magnitudes_id = $gridfs->storeFile($data->magnitudes->getPathname(), ['filename' => $data->magnitudes->getClientOriginalName(), 'contentType' => $data->magnitudes->getClientMimeType()]);
+    $directions_id = $gridfs->storeFile($data->directions->getPathname(), ['filename' => $data->directions->getClientOriginalName(), 'contentType' => $data->directions->getClientMimeType()]);
+    $real_id = $gridfs->storeFile($data->real->getPathname(), ['filename' => $data->real->getClientOriginalName(), 'contentType' => $data->real->getClientMimeType()]);
+    $imag_id = $gridfs->storeFile($data->imag->getPathname(), ['filename' => $data->imag->getClientOriginalName(), 'contentType' => $data->imag->getClientMimeType()]);
+    $combined_id = $gridfs->storeFile($data->combined->getPathname(), ['filename' => $data->combined->getClientOriginalName(), 'contentType' => $data->combined->getClientMimeType()]);
 
-    $imageFiles = [];
-    foreach ($data->images as $imageFile) {
-        $imageFiles[] = $gridfs->storeFile($imageFile->getPathname(), ['filename' => $imageFile->getClientOriginalName(), 'contentType' => $imageFile->getClientMimeType()]);
-    }
-
-    $insert = ['name' => $data->name, 'operator' => $data->operator, 'original_image' => $id, 'images' => $imageFiles];
+    $insert = [
+        'name' => $data->name,
+        'operator' => $data->operator,
+        'original_image' => $id,
+        'magnitudes' => $magnitudes_id,
+        'directions' => $directions_id,
+        'real' => $real_id,
+        'imag' => $imag_id,
+        'combined' => $combined_id,
+    ];
     $images->insert($insert);
 
     return new JsonResponse($insert);
