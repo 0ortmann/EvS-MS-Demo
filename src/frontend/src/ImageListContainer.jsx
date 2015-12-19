@@ -4,42 +4,32 @@ import './App.scss';
 
 export default class ImageListContainer extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = { images: [] };
-    }
-
-    componentDidMount() {
-        this.fetchImages();
-    }
-
-    fetchImages() {
-        let _this = this;
-        request.get('http://localhost:1337/images').end(function(err, res) {
-            if(err) {
-                console.log(err); 
-            }
-            _this.setState({images: JSON.parse(res.text)});
-            //console.log(_this.state.images);
-        });
-    }
-
     render() {
-
-        let images = this.state.images;
+        let images = this.props.images;
         if(images.length === 0) {
             return (<div className='images'><h3>Keine Bilder</h3></div>);
         }
 
         let _this = this;
         return (
-            <div className='imageListContainer'>
-                <h3>Bilder</h3>
-                <ul className='imageItemList'>
-                {images.map(function(item) {
-                    return <ImageItem name={item.name} amount={item.amount} date={item.date} deleteCB={_this.deleteExpense}/>
-                })}
-                </ul>
+            <div className="col-md-7">
+                <h2>Images</h2>
+                <table className='table imageItemList'>
+                    <thead>
+                        <tr>
+                            <th>Orig.</th>
+                            <th>Comb.</th>
+                            <th>Image name</th>
+                            <th>Operator</th>
+                            <th>Posted</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {images.map(function(item) {
+                            return <ImageItem image={item}/>
+                        })}
+                    </tbody>
+                </table>
             </div>);
     }
 }

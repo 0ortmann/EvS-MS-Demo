@@ -10,13 +10,16 @@
     "clean": "rm -rf public"
   },
   "author": "Konstantin Möllers, Felix Ortmann",
-  "repository": { 
-    "type" : "git",
-    "url" : "https://github.com/0ortmann/EvS-MS-Demo.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/0ortmann/EvS-MS-Demo.git"
   },
   "license": "MIT",
   "dependencies": {
+    "bootstrap-sass": "^3.3.6",
     "express": "^4.13.3",
+    "jquery": "^2.1.4",
+    "moment": "^2.10.6",
     "react": "^0.14.3",
     "react-dom": "^0.14.3"
   },

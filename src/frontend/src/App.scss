@@ -1,19 +1,11 @@
+$icon-font-path: "/fonts/";
+
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
 .app {
     width: 95%;
     border: 1px solid black;
     overflow: hidden;
-}
-
-
-.fileInputContainer {
-    border: 1px solid yellow;
-    overflow: hidden;
-}
-
-.imageListContainer {
-    width: 60%;
-    float: left;
-    border: 1px solid green;
 }
 
 .imageItem {

@@ -1,5 +1,10 @@
 <?php
 
+$filename = __DIR__.preg_replace('#(\?.*)$#', '', $_SERVER['REQUEST_URI']);
+if (php_sapi_name() === 'cli-server' && is_file($filename)) {
+    return false;
+}
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 date_default_timezone_set('Europe/Berlin');
@@ -47,6 +52,34 @@ class ImageData {
     public $real;
     /** @var \Symfony\Component\HttpFoundation\File\UploadedFile */
     public $magnitudes;
+    /** @var \Symfony\Component\HttpFoundation\File\UploadedFile */
+    public $date;
+
+    public static function fromDb(Request $request, array $data)
+    {
+        $imageData = new ImageData();
+        $imageData->name = $data['name'];
+        $imageData->operator = $data['operator'];
+
+        /** @var MongoDate $date */
+        $date = $data['date'];
+        $imageData->date = $date->toDateTime()->getTimestamp() * 1000;
+
+        $keys = [
+            'original_image',
+            'combined',
+            'directions',
+            'imag',
+            'real',
+            'magnitudes',
+        ];
+
+        foreach ($keys as $key) {
+            $imageData->$key = $request->getSchemeAndHttpHost() . '/files/' . $data[$key]->{'$id'};
+        }
+
+        return $imageData;
+    }
 }
 
 /** @var \Symfony\Component\Form\FormFactory $formFactory */
@@ -63,15 +96,15 @@ $imageForm = $formFactory
     ->add('magnitudes', FileType::class)
     ->getForm();
 
-$app->get('/images', function() use($app, $images) {
-    $image = $images->find();
+$app->get('/images', function(Request $request) use($app, $images) {
+    $image = $images->find()->sort(['date' => -1]);
 
     $images = [];
     while ($next = $image->getNext()) {
-        $images[] = $next;
+        $images[] = ImageData::fromDb($request, $next);
     }
 
-    return new JsonResponse($images);
+    return new JsonResponse($images, 200, ['Access-Control-Allow-Origin' => '*']);
 });
 
 $app->get('/files/{id}', function($id) use($app, $images, $gridfs) {
@@ -103,6 +136,7 @@ $app->post('/images', function (Request $request) use($images, $imageForm, $grid
     /** @var ImageData $data */
     $data = $imageForm->getData();
 
+    /** @var MongoId $id */
     $id = $gridfs->storeFile($data->original_image->getPathname(), ['filename' => $data->original_image->getClientOriginalName(), 'contentType' => $data->original_image->getClientMimeType()]);
     $magnitudes_id = $gridfs->storeFile($data->magnitudes->getPathname(), ['filename' => $data->magnitudes->getClientOriginalName(), 'contentType' => $data->magnitudes->getClientMimeType()]);
     $directions_id = $gridfs->storeFile($data->directions->getPathname(), ['filename' => $data->directions->getClientOriginalName(), 'contentType' => $data->directions->getClientMimeType()]);
@@ -119,6 +153,7 @@ $app->post('/images', function (Request $request) use($images, $imageForm, $grid
         'real' => $real_id,
         'imag' => $imag_id,
         'combined' => $combined_id,
+        'date' => new \MongoDate()
     ];
     $images->insert($insert);
 

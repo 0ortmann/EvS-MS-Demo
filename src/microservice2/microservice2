@@ -1,0 +1,2 @@
+#!/bin/sh
+php -S localhost:1339 -t web src/index.php
