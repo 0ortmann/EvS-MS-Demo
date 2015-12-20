@@ -6,7 +6,7 @@ export default class FileInputContainer extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { operator: null, files: null };
+        this.state = { operator: 'roberts_cross', files: null }; // hacky init state.
     }
 
     handleOperatorChange(e) {
