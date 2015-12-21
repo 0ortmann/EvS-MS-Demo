@@ -94,6 +94,15 @@
 	Es wird gezeigt, dass es bereits Möglichkeiten und neuartige Technologie gibt um sich vor Angriffen zu schützen.
 \end{abstract}
 
+\section{Einleitung}
+\label{sec:einleitung}
+
+Die Verschiedenartigkeit von Informationssystemen im Internet nimmt stetig zu. Waren es früher noch einfache Homepages um Inhalte auszuliefern, verlagern sich heutzutage komplexe Anwendungen zunehmend ins Web. Die Vorteile liegen dabei auf der Hand: Das Ausrollen neuer Software wird zum Kinderspiel und auch das Warten wird leichter. Allerdings wird das zentrale Softwaresystem auch mehr zum \textit{Single Point of Failure}, welcher der erhöhten Belastung nicht standhält. Konsequenterweise ist der Bedarf für eine verteilte und skalierbare Architektur aufgekommen. So entstand etwa der neue Trend zur Microservice-Infrastruktur.
+
+Mit diesem neuen Konzept kamen allerdings auch neue Risiken in Bezug auf Sicherheit auf. Denn sowohl die Architektur eines Microservices als auch die Kommunikation untereinander ermöglicht neue Sicherheitsprobleme. In der vorliegende Arbeit werden diese erläutert und diskutiert, um Lösungswege für neuartige Microservice-Netzwerke aufzuzeigen.
+
+Dazu strukturiert sich die Arbeit wie folgt. Zunächst wird in \autoref{sec:einführung} das Konzept der Microservices erläutert und dessen Sicherheitsperspektive motiviert. Weitergehend geht \autoref{sec:ms-arch-sec} auf Anwendungsarchitekturen von Microservices ein und erläutert dessen Sicherheitsaspekte. \autoref{sec:kommunikation} überträgt dieses Vorgehen auf die Kommunikation zwischen Microservice-Instanzen. In \autoref{sec:schutzziele} werden die drei primären Schutzziele diskutiert und  Zuletzt fasst \autoref{sec:zsmfassung} diese Arbeit zusammen.
+
 \include*{tex/einfuehrung}
 \include*{tex/architektur}
 \include*{tex/kommunikation}
