@@ -14,24 +14,28 @@ Die zweite geforderte Eigenschaft, die der \textbf{Autonomie}, besagt dass Micro
 
 Die Autonomie der Microservices eröffnet auch weitere Möglichkeiten für die Entwicklung. Etwa kann jeder Microservice in einer anderen Programmiersprache geschrieben werden, wenn diese dem Anwendungsfall besser dient. So kann für rechenintensive Aufgaben eine nebenläufige Sprache wie \textit{Clojure}\footnote{\url{http://clojure.org/}} verwendet werden oder es kann für einfache Aufgaben auf leichte Skriptsprachen wie etwa \textit{PHP}\footnote{\url{http://php.net/}} zurückgegriffen werden.
 
-Zuletzt erfordert \citeauthor{newman2015}s Definition die Eigenschaft der \textbf{Kooperation}. Dies ist bedingt durch die harten Grenzen, welche ein Microservice aufwirft, die eine Kommunikation der Dienste untereinander erzwingt. Um ein gemeinsames Ziel zu erreichen, beispielsweise einen Aufgabenablauf zu erfüllen, der heterogene Teilaufgaben vorsieht, müssen die Dienste zusammen arbeiten. Welche Protokolle dafür in Betracht gezogen werden können, wird in \autoref{sec:kommunikation} näher erläutert.
+Zuletzt erfordert \citeauthor{newman2015}s Definition die Eigenschaft der \textbf{Kooperation}. Dies ist bedingt durch die harten Grenzen, welche ein Microservice aufwirft, die eine Kommunikation der Dienste untereinander erzwingt. Um ein gemeinsames Ziel zu erreichen, beispielsweise einen Aufgabenablauf zu erfüllen, der heterogene Teilaufgaben vorsieht, müssen die Dienste zusammen arbeiten. Die Kommunikation unter den Diensten erfolgt in festgelegten Protokollen, wie etwa \textit{Message Queueing} oder \textit{RESTful APIs}. \autoref{sec:kommunikation} expliziert, welche Protokolle dafür in Betracht gezogen werden können.
+
+Die Verwendung abgesprochener Kommunikationsmittel indes ermöglicht das replizieren verschiedener Dienste. Denn die übertragenen Nachrichten können von einer Lastverteilung ausgelesen und auf verschiedene Knoten übertragen werden. Dadurch erreichen Microservices eine sehr hohe horizontale Skalierbarkeit, da sie quasi beliebig oft instantiiert werden können.
 
 Nachdem wir die drei wichtigsten Eigenschaften von Microservices erläutert haben, werden wir im nächsten Abschnitt deren Prinzip von weiteren Architekturmodellen abgrenzen und motivieren.
 
-\subsection{Abgrenzung zu anderen Prinzipien}
+\subsection{Abgrenzung zu anderen Modellen}
 \label{subsec:abgrenzung}
 
 Wenn man den Begriff „Microservice“ betrachtet, wird man schnell einen Bezug zu \textbf{serviceorientierten Architekturen} (SOA) erwarten. Wie bei Microservices sieht SOA eine Trennung der Anwendungslogik in funktionale Anwendungsteile vor. Diese muss aber im Gegensatz zu Microservices allerdings nicht hart sein, sondern auch innerhalb einer monolithischen Anwendungsstruktur erfolgen. Ebenso sieht SOA vor, dass die Benutzeroberfläche nicht Gegenstand der Services sei. Microservices hingegen postulieren eine Aufteilung der Oberfläche und betrachten diese als Bestandteil eines Dienstes.
 
 Große Ähnlichkeiten weisen Microservices ebenfalls zu \textbf{Multiagentensystemen} auf. Dies ist vor allem durch die Eigenschaften eines gerichteten Zwecks, der Autonomie und der Kooperation geschuldet. Dennoch muss man beachten, dass Microservices vielmehr durch pragmatische Ansätze entstanden sind und daher die soziologisch-theoretischen Prinzipien vermissen lassen, welche die agentenorientierte Softwareentwicklung auszeichnet. Darüber hinaus finden wir in Microservices soziotechnische Eigenschaften, die wir in klassischer Agentenorientierung nicht finden. Etwa die Vorgabe von getrennten Entwicklungsteams um die Struktur der Anwendung auf die Struktur der entwickelnden Organisation zu übertragen. 
 
-Es gibt allerdings solche Ansätze wiederum in der \textbf{Organisationsorientierten Entwicklung} nach \cite{Wester-Ebbinghaus10}. Dies ist eine Weiterentwicklung des Agentenansatzes, der insbesondere die Organisationsstruktur auf die Anwendung abbildet – und umgekehrt. Microservices sehen ähnliche Synergieeffekte, sind allerdings nicht in dem Maße schachtelbar wie Organisationssysteme.
+Es gibt allerdings solche Ansätze wiederum in der \textbf{organisationsorientierten Entwicklung} nach \cite{Wester-Ebbinghaus10}. Dies ist eine Weiterentwicklung des Agentenansatzes, der insbesondere die Organisationsstruktur auf die Anwendung abbildet – und umgekehrt. Microservices sehen ähnliche Synergieeffekte, sind allerdings nicht in dem Maße schachtelbar wie Organisationssysteme.
 
 Im kommenden Unterabschnitt betrachten wir die vorgestellten Microservice-Eigenschaften mit Fokus auf Sicherheit.
 
 \subsection{Motivation für Microservices und Sicherheit}
 \label{subsec:motivation}
 
-Allerdings birgt diese 
+Aufgrund der zuvor genannten Eigenschaften lösen Microservices sowohl Herausforderungen als auch Chancen für Sicherheitsaspekte einer Architektur. Herausfordernd ist dabei das Problem, dass ein Informationssystem nur so sicher ist wie ihr schwächstes Glied; dies kann bei einer Vielzahl von kleinen Rechensystem schnell schwierig zu überblicken sein. Insbesondere die Heterogenität der Dienste kann schnell zu Ausfällen und individuellen Sicherheitslücken führen.
+
+Auf der anderen Seite lassen sich Microservices aufgrund ihrer sehr guten Austauschbarkeit leichter warten. Für die jeweiligen Teams ist es wesentlich leichter selektiv Sicherheitslücken zu bekämpfen und neue Versionen eines Dienstes zu veröffentlichen ohne damit ein gesamtes System zu gefährden. Auch die Skalierbarkeit der Instanzen hat zur Folge das Dienstausfällen vorgebeugt werden kann. Insbesondere bei einer DoS-Attacke kann durch das schnelle Beenden und Neustarten von Microservices Gegenmaßnahmen geleistet werden.
 
 Nachdem wir mit diesem Abschnitt das Microservice-Konzept vorgestellt haben, diskutiert der folgende Microservice-Architekturen und legt dabei seinen Schwerpunkt auf die Sicherheitseigenschaften dieser.
