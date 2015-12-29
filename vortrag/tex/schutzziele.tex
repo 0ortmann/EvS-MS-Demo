@@ -13,9 +13,25 @@ Zur Einführung der drei Schutzziele ziehen wir die Definitionen von \citeauthor
 
 Für eine Microservice-Architektur betrifft dies vor allem die Kommunikation zwischen den einzelnen Microservice-Instanzen. Um diese für beide Gesprächspartner abzusichern werden zwei verschiedene Verfahren vorgestellt, zum einen die Handshake-basierte Authentifikation, bei der sich beide Gesprächspartner einander vorstellen, und die Token-basierte Authentifikation, bei welcher ein Geheimnis, ein sogenanntes „Token“, die Inhalte der Kommunikation quittieren und belegen.
 
-\subsubsection{Handshake-basierte Authentifikation}
+\subsubsection{OAuth-basierte Autorisierung}
 
-\subsubsection{Token-basierte Authentifikation}
+Als erstes diskutieren wir ein Handshake-basiertes Autorisierungsverfahren. Im Webumfeld ist das populärste das bereits zuvor angesprochene OAuth-Framework. Es ist aufgenommen worden von der \textit{Internet Engineering Task Force} (IETF). Die Spezifikation für die 2012 veröffentlichte Version 2 des OAuth-Frameworks ist in den \textit{Request for Comments} (RFC) Nummer 6749 der IETF zu finden. \cite{RFC6749}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=.55\linewidth]{img/OAuth2}
+	\caption{Protokollablauf bei OAuth 2 (übersetzt aus RFC 6749).}
+	\label{fig:oauth2}
+\end{figure}
+
+Zunächst wird aufgezeigt, wie eine Autorisierung mithilfe von OAuth 2 stattfinden kann, um auf Zugriff auf eine externe Ressource zu erhalten. Ein solcher Ablauf ist in \autoref{fig:oauth2} dargestellt. Eine Applikation, die auf die Ressource zugreifen möchte, fungiert dabei als Client. Vorab muss sich dieser beim Besitzer der Ressource eine Autorisierung erteilen lassen. Der Besitzer ist eine Entität, welche über die Informationen der erfragten Ressourcen verfügen kann. Etwa ist dies ein Benutzer oder eine Organisation, deren Details abgefragt werden.
+
+Erteilt der Besitzer die Autorisierung, kann der Client dessen Quittung nutzen um einen Autorisierungsserver zu kontaktieren. Dieser verwaltet die Zugriffe auf die von ihm angebotenen Ressourcen. Sobald der Client die Autorisierungserteilung vorgelegt hat, stellt der Server ein Zugriffstoken aus. Dieser hat dabei die Möglichkeit, die Gültigkeit des Tokens zeitlich zu begrenzen und regelmäßige Aktualisierungen anzufordern. 
+
+Abschließend kann der Client mithilfe eines Zugriffstokens nun auf die Ressourcen zugreifen, welche dem Besitzer gehören und dem Client freigegeben wurden. Dies können verschiedene Orte oder auch schreibende Zugriffe sein. Damit bietet OAuth für Microservices eine gute Möglichkeit, einen Autorisierungsservice anzubieten, über den Tokens für die anderen Microservices angefordert werden können. Im Folgenden stellen wir ein leichtgewichtiges Verfahren vor, welches ähnlich funktioniert.
+
+
+\subsubsection{JWT-basierte Authentifikation}
 
 
 \subsection{Integrität}
@@ -36,7 +52,9 @@ Für eine Microservice-Architektur betrifft dies vor allem die Kommunikation zwi
 In dem Blog-Beitrag \cite{Li15} wird ein neuartiger Ansatz motiviert, welcher die Verfügbarkeit von Lastverteilung verbessert. Dies ist notwendig, da der Last-verteilende \textit{Load Balancer} einen Flaschenhals darstellt. Jegliche Serverzugriffe werden zunächst im anvertraut. Dies stellt einen sogenannten \textit{„Single Point of Failure“} dar, denn sollte der \textit{Load Balancer} ausfallen, ist das System nicht mehr erreichbar.
 
 \begin{figure}
-	\caption{Schematische Darstellung von clientseitiger Lastverteilung}
+	\centering
+	\includegraphics[width=.55\linewidth]{img/clientloadbal}
+	\caption{Schematische Darstellung von clientseitiger Lastverteilung (aus Li, 2015). Drei heterogene Microservices (MS) verfügen jeweils über eine Lastverteilung (LB), welche alle Instanzen anderer Microservices kennt.}
 	\label{fig:clientseitige_lastverteilung}
 \end{figure}
 

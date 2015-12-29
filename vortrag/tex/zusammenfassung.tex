@@ -1,2 +1,12 @@
 \section{Zusammenfassung}
 \label{sec:zsmfassung}
+
+Dieser Aufsatz gibt einen groben Überblick über das Modell der Microservices und zeigt deren Perspektiven in Puncto Sicherheit auf. Dabei motivieren wir dieses Modell \hyperref[sec:einleitung]{zunächst} über die Heterogenität von WebServices und die Möglichkeiten die es in Bezug auf Softwareverteilung eröffnet.
+
+Danach geht der \hyperref[sec:einführung]{zweite Abschnitt} auf die Eigenschaften von Microservice-Systemen ein. Es werden eingehend die Prinzipien der Kohäsion, der Autonomie und der Kooperation besprochen und deren Auswirkungen auf die Entwicklung diskutiert. Außerdem grenzen wir Microservices von anderen Modellen, wie etwa serviceorientierten Architekturen oder Multiagentensystemen ab. Schließlich motivieren wir insbesondere die Herausforderungen und Chancen die sich durch Microservices für Systemsicherheit ergeben.
+
+Anschließend werden in \autoref{sec:ms-arch-sec} Technologien präsentiert, um Microservices umzusetzen und zu kapseln. Dabei werden virtuelle Maschinen und Container vorgestellt und verglichen. Beide Konzepte bieten Mechanismen zur Isolation von Anwendungen. Weiterhin wird eine Anforderungsanalyse an ein Microservice-basiertes System aufgestellt. Aufgrund der Aktualität wird Kubernetes als mögliche Abstraktion eines solchen Systems ausgewählt und näher erläutert. Konzepte zur Replizierung, Skalierung und Balancing von und zwischen Containern werden diskutiert. Sicherheitsfragen werden formuliert und beantwortet. Dabei liegt der Fokus im Speziellen auf dem Schutz des Gesamtsystems.
+
+Im \hyperref[sec:kommunikation]{darauffolgenden Abschnitt} zeigen wir verschiedene Möglichkeiten zur \stscom auf. Dabei werden insbesondere REST und Message Queues betrachtet. Mögliche Schwachstellen bei der \stscom werden herausgestellt; der Bedarf nach applikationsseitig implementiertem Schutz wird deutlich gemacht. Aufgrund der Heterogenität eines Microservice-basierten Systems muss jede Komponente selbst in der Lage sein, ankommende Nachrichten zu validieren und zu verifizieren.
+
+Weitergehend zeigt \autoref{sec:schutzziele} drei explizite Schutzziele auf: die Informationsvertraulichkeit, die Integrität und die Verfügbarkeit eines Informationssystems. 

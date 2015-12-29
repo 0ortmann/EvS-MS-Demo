@@ -37,3 +37,4 @@
 *.tdo
 src/microservice1/img
 src/microservice1/__pycache__
+!vortrag/img/*.pdf

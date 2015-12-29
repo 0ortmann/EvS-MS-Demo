@@ -3,7 +3,7 @@
 
 Wie in Kapitel \ref{sec:ms-arch-sec} beschrieben, besteht ein Microservice-basiertes System aus einer Menge von mindestens einem physikalischen Host und beliebig vielen Microservices. Um überhaupt von einem System sprechen zu können, müssen die einzelnen Komponenten noch vernetzt werden. Wir benutzen im Folgenden den Ausdurck \textit{Service-to-Service-Kommunikation} -- StS-Kommunikation. Services kommunizieren miteinander, tauschen Nachrichten aus, fordern Dinge an die von einem anderen Service berechnet werden müssen etc \cite{newman2015}. Diese Kommunikation kann angegriffen werden, insbesondere wenn die Kommunikation über unsichere Kanäle stattfindet wie etwa das World-Wide-Web.
 
-Im Folgenden wollen wir verschiedene Möglichkeiten von \stscom\ erläutern, Vor- und Nachteile diskutieren und auf Sicherheitsaspekte eingehen.
+Im Folgenden wollen wir verschiedene Möglichkeiten von \stscom erläutern, Vor- und Nachteile diskutieren und auf Sicherheitsaspekte eingehen.
 
 \subsection{Kommunikationswege}
 
@@ -31,8 +31,6 @@ Ein gewaltiger Vorteil von Queueing ist, dass diese Kommunikationsarchitektur da
 
 Probelematisch ist allerdings hier die Integrität von Nachrichten. Services sollten sich auf ein dediziertes Format einigen und jede angenommene Nachricht zunächst validieren und verifizieren. Da Sender und Empfänger sich nicht kennen, ist es schwierig den Absender eindeutig festzustellen. Allerdings kann durch ein geteiltes Nachrichtenformat, etwa durch ein JSON-Schema oder Ähnliches sichergestellt werden, dass eingehende Nachrichten überhaupt verarbeitet werden können.
 
-Queues implementiert man in der Regel nicht selbst, sondern greift auf bestehende Lösungen zurück. Es gibt zwei sehr aktuelle Message Queues, die für Microservice-Systeme verwendet werden. Das ist zum einen \textit{RabbitMQ}\footnote{\url{https://www.rabbitmq.com/}}, zum anderen \textit{ZeroMQ}\footnote{\url{http://zeromq.org/}}. Beim Einsatz jedweder Lösung sollte man stets darauf achten, dass Nachrichten vor Modifikation durch unbefugte geschützt sind. So könnte etwa bei jeder Nachricht in der Queue noch ein entsprechender Hash mitgeschickt werden, der zusätzlich zum Nachrichtenformat zur Validierung der Nachricht verwendet wird. 
+Queues implementiert man in der Regel nicht selbst, sondern greift auf bestehende Lösungen zurück. Es gibt zwei sehr aktuelle Message Queues, die für Microservice-Systeme verwendet werden. Das ist zum einen \textit{RabbitMQ}\footnote{\url{https://www.rabbitmq.com/}}, zum anderen \textit{ZeroMQ}\footnote{\url{http://zeromq.org/}}. Beim Einsatz jedweder Lösung sollte man stets darauf achten, dass Nachrichten vor Modifikation durch unbefugte geschützt sind. So könnte etwa bei jeder Nachricht in der Queue noch ein entsprechender Hash mitgeschickt werden, der zusätzlich zum Nachrichtenformat zur Validierung der Nachricht verwendet wird.
 
-\subsection{Zusammenfassung}
-
-In diesem Kapitel haben wir verschiedene Möglichkeiten zur \stscom\ aufgezeigt. Dabei wurden insbesondere REST und Message Queues betrachtet. Mögliche Schwachstellen bei der \stscom\ wurden herausgestellt; der Bedarf nach applikationsseitig implementiertem Schutz wurde deutlich gemacht. Aufgrund der Heterogenität eines Microservice-basierten Systems muss jede Komponente selbst in der Lage sein, ankommende Nachrichten zu validieren und zu verifizieren. Im Folgenden werden wir Schutzziele definieren und auf Microservice-Systeme sowie auf Kommunikation übertragen. Es werden einige konkrete Verfahren und Bibliotheken vorgestellt, mit denen sich diese Schutzziele umsetzen lassen.
+Im Folgenden werden wir Schutzziele definieren und auf Microservice-Systeme sowie auf Kommunikation übertragen. Es werden einige konkrete Verfahren und Bibliotheken vorgestellt, mit denen sich diese Schutzziele umsetzen lassen. 
