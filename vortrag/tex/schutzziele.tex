@@ -1,7 +1,9 @@
 \section{Schutzziele}
 \label{sec:schutzziele}
 
-Nachdem wir bisher auf die Architektur und die Kommunikation von Microservices eingegangen sind, betrachten wir im folgenden Abschnitt Angriffspunkte einer solchen Infrastruktur. Explizit werden drei Schutzziele der Informationssicherheit betrachtet, welche eine besondere Relevanz in verteilten Systemen spielen. Zunächst gehen wir auf das der Vertraulichkeit in \autoref{subsec:vertraulichkeit} ein. Weitergehend setzt sich \autoref{subsec:integrität} mit der Integrität und zuletzt \autoref{subsec:verfügbarkeit} mit der Verfügbarkeit von Informationen innerhalb eines Microservice-Netzwerks auseinander.
+Nachdem wir bisher auf die Architektur und die Kommunikation von Microservices eingegangen sind, betrachten wir in diesem Abschnitt die Angriffspunkte einer solchen Infrastruktur. Explizit werden dazu Schutzziele der Informationssicherheit betrachtet. Diese sind ein guter Maßstab dafür, ob bestimmte Angriffe gegen ein Informationssystem möglich sind oder nicht. In dieser Arbeit werden wir für drei Ziele Schutzmechanismen vorschlagen, welche für Microservices in Betracht gezogen werden können. Die ausgewählten Schutzziele spielen dabei eine besondere Relevanz in verteilten Systemen. 
+
+Zunächst werden wir daher in \autoref{subsec:vertraulichkeit} auf das Ziel der Vertraulichkeit eingehen. Weitergehend setzt sich \autoref{subsec:integrität} mit der Integrität und zuletzt \autoref{subsec:verfügbarkeit} mit der Verfügbarkeit von Informationen innerhalb eines Microservice-Netzwerks auseinander.
 
 
 \subsection{Vertraulichkeit}
@@ -13,13 +15,14 @@ Zur Einführung der drei Schutzziele ziehen wir die Definitionen von \citeauthor
 
 Für eine Microservice-Architektur betrifft dies vor allem die Kommunikation zwischen den einzelnen Microservice-Instanzen. Um diese für beide Gesprächspartner abzusichern werden zwei verschiedene Verfahren vorgestellt, zum einen die Handshake-basierte Authentifikation, bei der sich beide Gesprächspartner einander vorstellen, und die Token-basierte Authentifikation, bei welcher ein Geheimnis, ein sogenanntes „Token“, die Inhalte der Kommunikation quittieren und belegen.
 
+
 \subsubsection{OAuth-basierte Autorisierung}
 
-Als erstes diskutieren wir ein Handshake-basiertes Autorisierungsverfahren. Im Webumfeld ist das populärste das bereits zuvor angesprochene OAuth-Framework. Es ist aufgenommen worden von der \textit{Internet Engineering Task Force} (IETF). Die Spezifikation für die 2012 veröffentlichte Version 2 des OAuth-Frameworks ist in den \textit{Request for Comments} (RFC) Nummer 6749 der IETF zu finden. \cite{RFC6749}
+Als erstes diskutieren wir ein Handshake-basiertes Autorisierungsverfahren. Im Webumfeld ist das populärste das bereits zuvor angesprochene OAuth-Framework. Es ist aufgenommen worden von der \textit{Internet Engineering Task Force} (IETF). Die Spezifikation für die 2012 veröffentlichte Version 2 des OAuth-Frameworks ist in den \textit{Request for Comments} (RFC) Nummer 6749 der IETF zu finden. Es ist insbesondere für \textit{Single-Sign-On}-Dienste geeignet; also in den Fällen, bei denen man für verschiedene Dienste die gleichen Zugangsdaten verwenden möchte. \cite{RFC6749}
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=.55\linewidth]{img/OAuth2}
+	\includegraphics[width=.52\linewidth]{img/OAuth2}
 	\caption{Protokollablauf bei OAuth 2 (übersetzt aus RFC 6749).}
 	\label{fig:oauth2}
 \end{figure}
@@ -32,6 +35,32 @@ Abschließend kann der Client mithilfe eines Zugriffstokens nun auf die Ressourc
 
 
 \subsubsection{JWT-basierte Authentifikation}
+
+Das zuvor gezeigte OAuth-Verfahren offenbart durch seinen Aufbau, dass wir bereits eine recht komplexe Infrastruktur zur Verfügung stellen müssen, um das Framework umzusetzen: drei Applikationen, welche über Formulare mit dem Benutzer interagieren und zusätzlich mit einer Datenbank in welcher die Benutzerdaten abgelegt werden müssen.
+
+Wenn man daher eine Authentifizierung etwas minimaler aufbauen möchte, bieten sich daher \textit{JSON Web Tokens} (JWT) an. Bei diesen können beliebige Informationen encodiert werden, die mithilfe eines Schlüssels zertifiziert werden, um dessen Ursprung zu bestätigen und die Unversehrtheit zu schützen. Diese Technologie hat es im Mai 2015 ebenfalls geschafft, Bestandteil der IETF-Spezifikationen zu werden und ist als RFC mit der Nummer 7519 zu finden. \cite{RFC7519}
+
+Ein JWT besteht aus drei Informationen: Zunächst wird ein Header übertragen, welcher den verwendeten Algorithmus zur Kodierung der Signatur enthält und den Typen des Tokens expliziert; derzeit ist hierfür nur „JWT“ zulässig. Als nächstes folgen die Daten, welche übertragen werden sollen. Diese werden in Form eines JSON benutzt. Die Daten und der Header werden Base64-Kodiert und durch einen Punkt getrennt. Abschließend wird eine Signatur auf Basis dieses Datums berechnet. Dazu wird der im Header deklarierte Algorithmus, entweder \textit{SHA 256} oder \textit{RSA}, benutzt. Die Signatur wird nach einem weiteren Punkt an das bisher berechnete Datum gehängt und bildet damit das vollständige Token. Ein Beispiel zeigt \autoref{fig:jwt}.
+
+\begin{figure}[b]
+	\centering
+	{\tt \textcolor{red}{
+			eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9}.\textcolor{violet}{eyJ0aG\\
+			VtYSI6Ik1pY3Jvc2VydmljZXMgdW5kIFNpY2hlcmhla\\
+			XQiLCJzZW1pbmFyIjoiS29tcG9uZW50ZW4sIEFnZW50\\
+			ZW4gdW5kIFdvcmtmbG93cyBpbiB2ZXJ0ZWlsdGVuIFN\\
+			5c3RlbWVuIn0}.\textcolor{blue}{ASG6OtMb3J30KpwY956UQYAwobI3mm\\
+			jH\_7jeUtDEBbTlJmwv632Iw9zIZCfh17h0LZrX3Bny\\
+			lJQsaF05bZLejzs-x-wbiTvQxct41Pt0mBlRGKphmK2\\
+			hMByfBsrsPbRLpcwpotESsUx6T9FmqsMOXOyBC9RVlL\\
+			z9h-6XHFg7hls}}
+	\caption{Ein \textit{JSON Web Token}. In Rot ist der Header angegeben, Violett gibt die übertragenen Daten an (Thema und Seminar dieses Aufsatzes) und in Blau ist die in \textit{RSA}-kodierte Signatur enthalten.}
+	\label{fig:jwt}
+\end{figure}
+
+Verwendet man zur Kodierung den \textit{SHA-256}-Algorithmus, so wird ein Geheimnis benutzt, welches nur dem JWT-generierenden Knoten bekannt ist. Bei \textit{RSA} ist es hingegen möglich, ein Schlüsselpaar aus privatem und öffentlichem Schlüssel zu verwenden. Dies ist insbesondere für Microservice-Umgebungen interessant, denn so kann einem Microservice, der lediglich für das Anmelden zuständig ist, der private Schlüssel zum Erstellen des Tokens bekannt sein. Allerdings kann allen Microservices hingegen der öffentliche Schlüssel vorliegen – so kann jeder Microservice beim Eintreffen einer Nachricht die Gültigkeit des Tokens überprüfen und im Falle einer Fälschung die Weiterverarbeitung verweigern.
+
+Das nächste Schutzziel, welchem sich dieser Aufsatz widmen wird, ist die Integrität der zu übertragenen Daten zu schützen. JWT kann, wie wir angegeben haben, auch dazu verwendet werden, würde allerdings so für größere Datenmengen zweckentfremdet werden.
 
 
 \subsection{Integrität}
