@@ -1,0 +1,29 @@
+mongo:
+  build: ./mongo
+  ports:
+    - 12345:27017
+  hostname: mongo
+  volumes:
+    - ./mongo/data/db:/data/db
+
+frontend:
+  build: ./frontend
+  ports:
+    - 3000:3000
+  hostname: frontend
+
+ms1:
+  build: ./microservice1
+  ports:
+    - 1338:1338
+  hostname: ms1
+  links:
+    - ms2:ms2
+
+ms2:
+  build: ./microservice2
+  ports:
+    - 1339:1339
+  links:
+    - mongo:mongo
+  hostname: ms2 

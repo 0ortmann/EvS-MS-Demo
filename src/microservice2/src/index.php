@@ -18,7 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-const MONGO_SERVER = 'mongodb://localhost:27017/evs';
+//const MONGO_SERVER = 'mongodb://localhost:27017/evs';
+const MONGO_SERVER = 'mongodb://mongo:27017/evs';
 
 // Init MongoDB.
 $mongo = new MongoClient(MONGO_SERVER);
@@ -62,22 +63,23 @@ class ImageData {
         $imageData->operator = $data['operator'];
 
         /** @var MongoDate $date */
-        $date = $data['date'];
-        $imageData->date = $date->toDateTime()->getTimestamp() * 1000;
+        if (array_key_exists('date', $data)) {
+            $date = $data['date'];
+            $imageData->date = $date->toDateTime()->getTimestamp() * 1000;
 
-        $keys = [
-            'original_image',
-            'combined',
-            'directions',
-            'imag',
-            'real',
-            'magnitudes',
-        ];
+            $keys = [
+                'original_image',
+                'combined',
+                'directions',
+                'imag',
+                'real',
+                'magnitudes',
+            ];
 
-        foreach ($keys as $key) {
-            $imageData->$key = $request->getSchemeAndHttpHost() . '/files/' . $data[$key]->{'$id'};
+            foreach ($keys as $key) {
+                $imageData->$key = $request->getSchemeAndHttpHost() . '/files/' . $data[$key]->{'$id'};
+            }
         }
-
         return $imageData;
     }
 }

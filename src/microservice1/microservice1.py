@@ -11,6 +11,8 @@ Simple Flask-API for serving requests. API offers stuff for basic image processi
 '''
 
 UPLOAD_FOLDER = './uploads'
+#DB_SERVER = 'localhost'
+DB_SERVER = 'ms2'
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -70,7 +72,7 @@ def sendToStorage(image_name, operation):
               ('magnitudes', ('magnitudes.png', open('img/' + operation + '_magnitudes.png', 'rb'), 'image/png')),
               ('real', ('real.png', open('img/' + operation + '_real.png', 'rb'), 'image/png')),
               ('original_image', ('original_image', open("img/original.png", 'rb'), 'image/png'))]
-    send('http://localhost:1339/images', files=images, data={'operator': operation, 'name': image_name})
+    send('http://' + DB_SERVER + ':1339/images', files=images, data={'operator': operation, 'name': image_name})
     
 @app.route('/process/<operation>', methods=['POST'])
 def acceptImage(operation):

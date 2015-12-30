@@ -59,7 +59,7 @@ export default class FileInputContainer extends Component {
 
                     <div className="form-group">
                         <label htmlFor="inputFile">Image file</label>
-                        <input type="file" id="inputFile" name="file" onChange={this.handleFileChange.bind(this)}/>
+                        <input type="file" id="inputFile" accept="image/png" name="file" onChange={this.handleFileChange.bind(this)}/>
                     </div>
 
                     <div className="form-group">
