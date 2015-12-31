@@ -86,7 +86,7 @@ Neben der Integrität der Daten ist es auch wichtig, die Integrität eines Micro
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=.53\linewidth]{img/inte}
+	\includegraphics[width=.6\linewidth]{img/inte}
 	\caption{Rahmen der Integrationstests in einer Microservice-Architektur (übersetzt aus Clemson, 2014).}
 	\label{fig:integrationstests}
 \end{figure}
@@ -97,17 +97,37 @@ Bei einem Integrationstest werden bestimmte Teile eines gesamten Informationssys
 
 Mit der Integration verlassen wir den Bereich der softwaretechnisch lösbaren Sicherheitsprobleme und widmen uns im Folgendem dem letzten Schutzziel, welches wir betrachten werden, nämlich das der Verfügbarkeit eines Microservice-Systems.
 
+
 \subsection{Verfügbarkeit}
 \label{subsec:verfügbarkeit}
+
+Zuletzt widmen wir uns in dieser Arbeit der Verfügbarkeit als Schutzziel eines Microservice-Systems. Dabei ist die Maxime unseres Systems, nach Möglichkeit permanent erreichbar zu sein. Die folgende Definition erläutert den Verfügbarkeitsbegriff ausführlicher.
+
 „Die Verfügbarkeit betrifft sowohl informationstechnische Systeme als auch die darin verarbeiteten Daten und bedeutet, dass die Systeme jederzeit betriebsbereit sind und auf die Daten wie vorgesehen zugegriffen werden kann. Zum einen muss die Datenverarbeitung inhaltlich korrekt sein und zum anderen müssen alle Informationen und Daten zeitgerecht zur Verfügung stehen und ordnungsgemäß verarbeitet werden.“ \cite{Bedner+10}
+
+Microservices sind, wie bereits einleitend erwähnt, sehr einfach horizontal zu skalieren. Dadurch haben wir die Möglichkeit, viele parallele Instanzen zu benutzen welche die gleiche Aufgabe erfüllen. Dies machen wir uns im zunächst genannten Lösungsansatz zunutze. Daraufhin erläutern wir einen neuartigen Ansatz, wodurch dieses Prinzip sogar noch weiter verbessert werden kann, um eine noch bessere Verfügbarkeit zu erzielen.
 
 \subsubsection{Redundanz und Lastverteilung}
 
+Durch die lose Kopplung und die harten Grenzen können Microservice-Instanzen ohne weitere Mühen vervielfältigt werden. Da die Kommunikation über Webtechnologie erfolgt, können Microservices auch über Systemgrenzen hinweg auf mehrere Rechnerknoten verteilt werden. Das heißt wir haben zunächst die Möglichkeit, einen Datenknoten mit allen Microservices durch Aufrüsten der Hardware zu skalieren und können anschließend unter vertretbarem Aufwand einen zweiten Knoten mit dem ersteren verbinden, um auf diesem weitere Instanzen auszuführen.
+
+Haben wir mehrere Instanzen eines Microservices, benötigen wir einen Entscheider, welcher einen ankommenden Zugriff einer Instanz zuordnet. Einen solchen Entscheidungsvorgang nennen wir \textbf{Lastverteilung} (vom Englischen \textit{Load Balancing}). Zuvor bereits wurde eine der populärsten Implementierungen dieser angesprochen, nämlich die Software \textit{HAProxy}. Es gibt diverse Strategien, nach denen Lastverteilung ablaufen kann, und welche auch durch \textit{HAProxy} unterstützt werden.
+
+\begin{itemize}
+	\item Die einfachste Strategie ist eine, welche auf Basis des \textbf{Zufalls} entscheidet, welcher Instanz ein Auftrag zugeordnet wird. Allerdings wird dabei nicht berücksichtigt, wie groß die Aufträge sind, sodass in ungünstigen Fällen eine Instanz häufiger arbeitsintensive Aufträge erhält als andere.
+	
+	\item Als zweites kann auch \textbf{Sharding} in Betracht gezogen werden. Dafür teilen wir den ankommenden Datenbestand nach bestimmten Prinzipien auf möglichst gleichgroße Teilmengen auf. Etwa kann auf Basis des Alphabets (A-K, L-R, S-Z) oder eines Zahlenbereichs ein \textit{Shard} bestimmt werden. Eine Microservice-Instanz ist dann für einen solchen \textit{Shard} verantwortlich.
+	
+	\item Wir können die Last auch abhängig von der \textbf{Auslastung} eines jeweiligen Knoten verteilen. Dazu fragt die Lastverteilung die in Betracht gezogenen Knoten regelmäßig, wie viele Aufträge diese zur Zeit bearbeiten und weist ihnen dementsprechend weitere zu. Problematisch bei diesem Verfahren ist, dass es zusätzliche last erzeugt und technisch anspruchsvoller als die beiden zuvor erklärten Strategien ist.
+\end{itemize}
+
+Lastverteilung ermöglicht es der Architektur, mehrere Instanzen eines Microservices zu verwenden. Wie auch immer ist dabei zu erwähnen, dass wir einen neuen Flaschenhals erzeugen, da jegliche Microservice-Zugriffe zunächst der Lastverteilung anvertraut werden. Dies stellt einen sogenannten \textit{„Single Point of Failure“} dar. Im Folgenden zeigen wir daher eine Verbesserung des oben genannten Prinzips auf.
+
 \subsubsection{Clientseitige Lastverteilung}
 
-In dem Blog-Beitrag \cite{Li15} wird ein neuartiger Ansatz motiviert, welcher die Verfügbarkeit von Lastverteilung verbessert. Dies ist notwendig, da der Last-verteilende \textit{Load Balancer} einen Flaschenhals darstellt. Jegliche Serverzugriffe werden zunächst im anvertraut. Dies stellt einen sogenannten \textit{„Single Point of Failure“} dar, denn sollte der \textit{Load Balancer} ausfallen, ist das System nicht mehr erreichbar.
+In dem Blog-Beitrag \cite{Li15} wird ein neuartiger Ansatz motiviert, welcher die Verfügbarkeit von Lastverteilung verbessert. Dies ist notwendig, da, wie eben festgestellt, der Last-verteilende \textit{Load Balancer} einen Flaschenhals darstellt. Sollte dieser ausfallen, ist das System nicht mehr erreichbar.
 
-\begin{figure}
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=.55\linewidth]{img/clientloadbal}
 	\caption{Schematische Darstellung von clientseitiger Lastverteilung (aus Li, 2015). Drei heterogene Microservices (MS) verfügen jeweils über eine Lastverteilung (LB), welche alle Instanzen anderer Microservices kennt.}
@@ -123,7 +143,9 @@ Die von \citeauthor{Li15} entwickelte Grundstruktur \textit{„Baker Street“}\
 	
 	\item Der \textit{Health Checker} \textbf{Watson} über den ebenfalls jede lokale Instanz verfügt. Er übermittelt den Zustand des Microservices und meldet diesen ebenfalls initial an.
 	
-	\item Zuletzt gibt es das \textbf{Datawire-Verzeichnis}, ein leichtgewichtiger globaler Diensterkundungs-Mechanismus, welcher Informationen von jeder Watson-Instanz erhält und Verfügbarkeitsänderungen zu jeder lokalen Sherlock-Instanz weiterleitet.
+	\item Zuletzt gibt es das \textbf{Datawire-Verzeichnis}, ein leichtgewichtiger globaler Diensterkundungs"=Mechanismus, welcher Informationen von jeder Watson-Instanz erhält und Verfügbarkeitsänderungen zu jeder lokalen Sherlock-Instanz weiterleitet.
 \end{itemize}
 
-\subsubsection{Kontinuierliches und unabhängiges Deployment}
+Mit diesen drei Komponenten haben wir eine hohe Verfügbarkeit für die Grundstruktur unserer Microservice-Systems erzielt: Fällt ein Knoten mitsamt seines \textit{Load Balancers} aus, weiß das \textit{Datawire}-Verzeichnis Bescheid und die Anwendung bleibt verfügbar, da es keinen zentralen Knoten mehr gibt, der nicht antworten könnte.
+
+Damit haben wir für alle drei Schutzziele der Vertraulichkeit, der Integrität und der Verfügbarkeit ausreichende Lösungsmöglichkeiten aufgezählt und schließen im folgenden Abschnitt die Ausarbeitung mit einer Zusammenfassung der Ergebnisse.
