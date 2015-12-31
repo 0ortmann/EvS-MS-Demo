@@ -11,8 +11,8 @@ Simple Flask-API for serving requests. API offers stuff for basic image processi
 '''
 
 UPLOAD_FOLDER = './uploads'
-#DB_SERVER = 'localhost'
-DB_SERVER = 'ms2'
+DB_SERVER = 'localhost'
+#DB_SERVER = 'ms2'
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 

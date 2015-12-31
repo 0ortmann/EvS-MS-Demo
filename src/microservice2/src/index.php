@@ -18,8 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-//const MONGO_SERVER = 'mongodb://localhost:27017/evs';
-const MONGO_SERVER = 'mongodb://mongo:27017/evs';
+const MONGO_SERVER = 'mongodb://localhost:27017/evs';
+//const MONGO_SERVER = 'mongodb://mongo:27017/evs';
 
 // Init MongoDB.
 $mongo = new MongoClient(MONGO_SERVER);
@@ -97,6 +97,22 @@ $imageForm = $formFactory
     ->add('real', FileType::class)
     ->add('magnitudes', FileType::class)
     ->getForm();
+
+// Output request and response
+
+$app->after(function (Request $request, Response $response) {
+    if ($response->headers->has('X-No-Logging')) {
+        return;
+    }
+
+    $protocol = $request->server->get('SERVER_PROTOCOL');
+    error_log(sprintf("Request\r\n\033[1;33m%s %s %s\e[0;33m\r\n%s\033[0m", $request->getMethod(), $request->getRequestUri(), $protocol, $request->headers));
+
+    $color = $response->isSuccessful() ? 32 : 31;
+    error_log(sprintf("Response\r\n\033[1;%dmHTTP/%s %s %s\e[0;%1\$dm\r\n%s[0m", $color, $response->getProtocolVersion(), $response->getStatusCode(), Response::$statusTexts[$response->getStatusCode()], $response->headers));
+});
+
+// Routes
 
 $app->get('/images', function(Request $request) use($app, $images) {
     $image = $images->find()->sort(['date' => -1]);

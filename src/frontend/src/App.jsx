@@ -14,7 +14,7 @@ export class App extends Component {
         let _this = this;
         window.setInterval(function () {
             _this.fetchImages();
-        }, 10000);
+        }, 60000);
     }
 
     componentDidMount() {
