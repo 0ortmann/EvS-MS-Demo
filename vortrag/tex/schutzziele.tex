@@ -40,7 +40,7 @@ Das zuvor gezeigte OAuth-Verfahren offenbart durch seinen Aufbau, dass wir berei
 
 Wenn man daher eine Authentifizierung etwas minimaler aufbauen möchte, bieten sich daher \textit{JSON Web Tokens} (JWT) an. Bei diesen können beliebige Informationen encodiert werden, die mithilfe eines Schlüssels zertifiziert werden, um dessen Ursprung zu bestätigen und die Unversehrtheit zu schützen. Diese Technologie hat es im Mai 2015 ebenfalls geschafft, Bestandteil der IETF-Spezifikationen zu werden und ist als RFC mit der Nummer 7519 zu finden. \cite{RFC7519}
 
-Ein JWT besteht aus drei Informationen: Zunächst wird ein Header übertragen, welcher den verwendeten Algorithmus zur Kodierung der Signatur enthält und den Typen des Tokens expliziert; derzeit ist hierfür nur „JWT“ zulässig. Als nächstes folgen die Daten, welche übertragen werden sollen. Diese werden in Form eines JSON benutzt. Die Daten und der Header werden Base64-Kodiert und durch einen Punkt getrennt. Abschließend wird eine Signatur auf Basis dieses Datums berechnet. Dazu wird der im Header deklarierte Algorithmus, entweder \textit{SHA 256} oder \textit{RSA}, benutzt. Die Signatur wird nach einem weiteren Punkt an das bisher berechnete Datum gehängt und bildet damit das vollständige Token. Ein Beispiel zeigt \autoref{fig:jwt}.
+Ein JWT besteht aus drei Informationen: Zunächst wird ein Header übertragen, welcher den verwendeten Algorithmus zur Kodierung der Signatur enthält und den Typen des Tokens expliziert; derzeit ist hierfür nur „JWT“ zulässig. Als nächstes folgen die Daten, welche übertragen werden sollen. Diese werden in Form eines JSON benutzt. Die Daten und der Header werden Base64-Kodiert und durch einen Punkt getrennt. Abschließend wird eine Signatur auf Basis dieses Datums berechnet. Dazu wird der im Header deklarierte Algorithmus, entweder \textit{HMAC} oder \textit{RSA}, benutzt. Die Signatur wird nach einem weiteren Punkt an das bisher berechnete Datum gehängt und bildet damit das vollständige Token. Ein Beispiel zeigt \autoref{fig:jwt}.
 
 \begin{figure}[b]
 	\centering
@@ -58,17 +58,44 @@ Ein JWT besteht aus drei Informationen: Zunächst wird ein Header übertragen, w
 	\label{fig:jwt}
 \end{figure}
 
-Verwendet man zur Kodierung den \textit{SHA-256}-Algorithmus, so wird ein Geheimnis benutzt, welches nur dem JWT-generierenden Knoten bekannt ist. Bei \textit{RSA} ist es hingegen möglich, ein Schlüsselpaar aus privatem und öffentlichem Schlüssel zu verwenden. Dies ist insbesondere für Microservice-Umgebungen interessant, denn so kann einem Microservice, der lediglich für das Anmelden zuständig ist, der private Schlüssel zum Erstellen des Tokens bekannt sein. Allerdings kann allen Microservices hingegen der öffentliche Schlüssel vorliegen – so kann jeder Microservice beim Eintreffen einer Nachricht die Gültigkeit des Tokens überprüfen und im Falle einer Fälschung die Weiterverarbeitung verweigern.
+Verwendet man zur Kodierung den \textit{HMAC}-Algorithmus, so wird ein Geheimnis benutzt, welches nur dem JWT-generierenden Knoten bekannt ist. Bei \textit{RSA} ist es hingegen möglich, ein Schlüsselpaar aus privatem und öffentlichem Schlüssel zu verwenden. Dies ist insbesondere für Microservice-Umgebungen interessant, denn so kann einem Microservice, der lediglich für das Anmelden zuständig ist, der private Schlüssel zum Erstellen des Tokens bekannt sein. Allerdings kann allen Microservices hingegen der öffentliche Schlüssel vorliegen – so kann jeder Microservice beim Eintreffen einer Nachricht die Gültigkeit des Tokens überprüfen und im Falle einer Fälschung die Weiterverarbeitung verweigern.
 
 Das nächste Schutzziel, welchem sich dieser Aufsatz widmen wird, ist die Integrität der zu übertragenen Daten zu schützen. JWT kann, wie wir angegeben haben, auch dazu verwendet werden, würde allerdings so für größere Datenmengen zweckentfremdet werden.
 
 
 \subsection{Integrität}
 \label{subsec:integrität}
+
+Neben der Gewissheit, den Sender einer Nachricht zurückverfolgen zu können, interessiert uns als empfangendes System im Folgenden, auch über deren Inhalt eine Aussage treffen zu können. Diese wird durch das Schutzziel der Integrität abgedeckt und wie folgt definiert.
+
 „Integrität oder Unversehrtheit bedeutet zweierlei, nämlich die Vollständigkeit und Korrektheit der Daten (Datenintegrität) und die korrekte Funktionsweise des Systems (Systemintegrität). Vollständig bedeutet, dass alle Teile der Information verfügbar sind. Korrekt sind Daten, wenn sie den bezeichneten Sachverhalt unverfälscht wiedergeben. Die Integrität bedeutet, dass Daten im Laufe der Verarbeitung oder Übertragung mittels des Systems nicht beschädigt oder durch Nichtberechtigte unbefugt verändert werden können. Beschädigungs- oder Veränderungsmöglichkeiten sind das Ersetzen, Einfügen und Löschen von Daten oder Teilen davon.“ \cite{Bedner+10}
 
-\subsubsection{Verschlüsselungsverfahren}
+Wir gehen zunächst auf ein Verfahren ein, um die Datenintegrität zu schützen und werden daraufhin Möglichkeiten zum Schutze der Systemintegrität in Microservices aufzeigen.
 
+\subsubsection{Datenintegrität}
+
+Ein besonderes Problem, welches durch die lose Kopplung der Microservice-Instanzen entsteht, ist, dass die Daten zur Weiterverarbeitung abhör- und manipulierbare Wege über standardisierte Protokolle wählen müssen. Wie bereits festgestellt, erfolgt die Kommunikation etwa über REST und damit über HTTP. 
+
+Eine Lösung, die sich hier anbietet, sind Verschlüsselungsverfahren. Das oben angesprochene Framework \textit{Kubernetes} beispielsweise verteilt unter allen Knoten Zertifikate, die ausschließlich im Container-Netzwerk bekannt sind. So können HTTPS-Verbindungen zwischen den Microservice-Instanzen hergestellt werden, die dank AES-Verschlüsselung nicht mehr abgehört oder manipuliert werden können.
+
+Weitere Protokolle, um komplexeren Anforderungen zu genügen, sind das verschlüsselte \textit{WebSocket}-Protokoll WSS oder das sicheres FTP, sprich SFTP. Eine Verbindung via \textit{WebSockets} bietet ohnehin die Möglichkeit an, vor dem Senden der Daten eine Verschlüsselung zu installieren. Allerdings ist hier zu beachten, dass diese im Browser zurückverfolgt werden kann. Eine SFTP-Verbindung funktioniert über das SSH-Protokoll, welches verschiedene Möglichkeiten zur sicheren Kommunikation bietet; etwa auch wie bei JWT mit einem Schlüsselpaar aus öffentlichem und privatem Schlüssel.
+
+\subsubsection{Systemintegrität}
+
+Neben der Integrität der Daten ist es auch wichtig, die Integrität eines Microservice-Systems zu wahren. Ein Ansatz dafür ist zum Beispiel das automatisierte Testen. Wie dieses auf die lose Kopplung einer Microservice-Architektur angewendet werden kann, um die korrekte Arbeitsweise jener zu validieren, wird in dem Vortrag \cite{Clemson14} geschildert. In diesem wird gezeigt, wie Integrationstests genutzt werden können, um das Zusammenspiel mehrerer Microservices zu testen.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=.53\linewidth]{img/inte}
+	\caption{Rahmen der Integrationstests in einer Microservice-Architektur (übersetzt aus Clemson, 2014).}
+	\label{fig:integrationstests}
+\end{figure}
+
+Bei einem Integrationstest werden bestimmte Teile eines gesamten Informationssystems als abgeschlossenes Subsystem getestet. So können Fehler oder Schwächen einer Schnittstelle entdeckt werden und es wird verhindert, dass bei zunehmender Änderung der einzelnen Komponenten bestimmte Abkommen nicht mehr eingehalten sind, was zu Laufzeitfehlern führen könnte.
+
+\autoref{fig:integrationstests} zeigt eine exemplarische Microservice-Architektur auf. Hierbei sind die Bereiche hervorgehoben, bei denen die Integrationstests unseres Dienstes ansetzen sollen. Der untere Abschnitt zeigt \textbf{Persistent-Integrationstests}. Dabei wird getestet, ob ein Microservice korrekt mit einer Datenbank, einem Cache oder der Abstraktion einer solchen arbeitet. Weitergehend bildet der rechte Bereich \textbf{Gateway-Integrationstests} ab. Hier können Fehler bei der Umsetzung der verwendeten Protokolle, \textit{Message Queues} oder auch in der JWT-Implementierung aufgedeckt werden. Außerdem wird festgestellt, ob ein Microservice die essentiellen Daten überträgt, die er vorgibt zu senden.
+
+Mit der Integration verlassen wir den Bereich der softwaretechnisch lösbaren Sicherheitsprobleme und widmen uns im Folgendem dem letzten Schutzziel, welches wir betrachten werden, nämlich das der Verfügbarkeit eines Microservice-Systems.
 
 \subsection{Verfügbarkeit}
 \label{subsec:verfügbarkeit}

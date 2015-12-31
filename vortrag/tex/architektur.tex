@@ -35,9 +35,9 @@ Docker bietet hervorragende Sicherheit im Sinne von Isolation. Durch die intelli
 Dockers Charakteristika legen nahe, wie gut diese Technologie geeignet ist um die Anforderungen abzudecken, die eine Microservice-Architektur mit sich bringt. Durch das Design von Docker sind in Containern laufende Prozesse vollständig unabhängig voneinander. Services lassen sich in Form von Images einfach replizieren und portieren. Das ausführende System ist unwichtig, solange es ein Linux System ist und Docker installiert ist. Zum Thema Microservices, die mit Hilfe von Docker realisiert werden finden sich viele aktuelle Softwareprojekte.
 
 
-\subsection{Managing Microservices / Orchestrierung}
+\subsection{Orchestrierung von Microservices}
 
-Es gibt verschiedene Möglichkeiten, Microservices mit einander interagieren zu lassen um daraus ein komplexeres System entstehen zu lassen. Generell gilt für Microservices, dass sie \textit{klein}, auf \textit{eine Aufgabe} spezialisiert und \textit{autonom} sind \cite{newman2015}. Das bedeutet insbesondere auch, dass Services eines Systems einander meist nicht kennen. Im Folgenden werden einige Herausforderungen diskutiert, die beim Bau eines Microservice-basierten Systems entstehen. Es werden Software Lösungen und Frameworks vorgestellt, die viele der Problemstellungen intelligent lösen. Sicherheitskritische Bereiche werden aufgezeigt und Maßnahmen zu deren Schutz erläutert. Anschließend wird das opensource Project \textit{Kubernetes} von Google vorgestellt.
+Es gibt verschiedene Möglichkeiten, Microservices miteinander interagieren zu lassen um daraus ein komplexeres System zu bilden. Generell gilt für Microservices, dass sie \textit{klein}, auf \textit{eine Aufgabe} spezialisiert und \textit{autonom} sind \cite{newman2015}. Das bedeutet insbesondere auch, dass Services eines Systems einander meist nicht kennen. Im Folgenden werden einige Herausforderungen diskutiert, die beim Bau eines Microservice-basierten Systems entstehen. Es werden Software Lösungen und Frameworks vorgestellt, die viele der Problemstellungen intelligent lösen. Sicherheitskritische Bereiche werden aufgezeigt und Maßnahmen zu deren Schutz erläutert. Anschließend wird das Open-Source-Projekt \textit{Kubernetes} von Google vorgestellt.
 
 \subsubsection{Systemanforderungen}
 \label{subsec:arch-requirements}
