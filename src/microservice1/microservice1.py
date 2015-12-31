@@ -52,7 +52,7 @@ def process(image, operation):
     else: return None
 
 
-def sendToStorage(image_name, operation):
+def sendToStorage(image_name, operation, authorization):
     """
     :param str image_name: Name of the image which will be sent.
     :param operation: The applied operation.
@@ -72,8 +72,18 @@ def sendToStorage(image_name, operation):
               ('magnitudes', ('magnitudes.png', open('img/' + operation + '_magnitudes.png', 'rb'), 'image/png')),
               ('real', ('real.png', open('img/' + operation + '_real.png', 'rb'), 'image/png')),
               ('original_image', ('original_image', open("img/original.png", 'rb'), 'image/png'))]
-    send('http://' + DB_SERVER + ':1339/images', files=images, data={'operator': operation, 'name': image_name})
-    
+    send('http://' + DB_SERVER + ':1339/images', files=images, data={'operator': operation, 'name': image_name}, headers={'Authorization': authorization})
+
+@app.route('/process/<operation>', methods=['OPTIONS'])
+def acceptImageOptions(operation):
+    ''' Basic image processing on the posted image '''
+    resp = Response("Success")
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
+    resp.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+
+    return resp
+
 @app.route('/process/<operation>', methods=['POST'])
 def acceptImage(operation):
     ''' Basic image processing on the posted image '''
@@ -81,7 +91,7 @@ def acceptImage(operation):
     image = Image.from_file(posted)
     image.save("img/original.png")
     process(image, operation) # stores everything in img/ folder
-    sendToStorage(name, operation)
+    sendToStorage(name, operation, request.headers.get('authorization'))
     return Response("Success", 200, headers={'Access-Control-Allow-Origin': '*'})
 
 if __name__ == '__main__':

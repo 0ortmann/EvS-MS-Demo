@@ -16,10 +16,18 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Lcobucci\JWT;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 const MONGO_SERVER = 'mongodb://localhost:27017/evs';
 //const MONGO_SERVER = 'mongodb://mongo:27017/evs';
+
+// Init key pair.
+$publicKey = new JWT\Signer\Key('file://../pubkey.pem');
+$privateKey = new JWT\Signer\Key('file://../privkey.pem');
 
 // Init MongoDB.
 $mongo = new MongoClient(MONGO_SERVER);
@@ -28,6 +36,8 @@ $mongo = new MongoClient(MONGO_SERVER);
 $database = $mongo->evs;
 /** @var MongoCollection $images */
 $images = $database->images;
+/** @var MongoCollection $users */
+$users = $database->users;
 /** @var MongoGridFS $gridfs */
 $gridfs = $database->getGridFS();
 
@@ -55,12 +65,15 @@ class ImageData {
     public $magnitudes;
     /** @var \Symfony\Component\HttpFoundation\File\UploadedFile */
     public $date;
+    /** @var string */
+    public $user;
 
     public static function fromDb(Request $request, array $data)
     {
         $imageData = new ImageData();
         $imageData->name = $data['name'];
         $imageData->operator = $data['operator'];
+        $imageData->user = $data['user'];
 
         /** @var MongoDate $date */
         if (array_key_exists('date', $data)) {
@@ -114,6 +127,33 @@ $app->after(function (Request $request, Response $response) {
 
 // Routes
 
+$app->post('/login', function(Request $request) use($users, $privateKey) {
+
+    $name = $request->get('name');
+    $user = $users->findOne(['name' => $name]);
+    $password = $request->get('password');
+    if (null === $user || $password !== $user['password']) {
+        throw new HttpException(Response::HTTP_FORBIDDEN, 'Invalid username or password.');
+    }
+
+    // Generate new JSON Web Token.
+    $builder = new JWT\Builder();
+    $builder
+        ->setNotBefore(time())
+        ->setIssuer($request->getSchemeAndHttpHost())
+        ->setId($user['_id']->{'$id'})
+    ;
+
+    foreach (['name', 'email', 'given_name', 'family_name', 'email_verified', 'gender'] as $field) {
+        $builder->set($field, $user[$field]);
+    }
+
+    $builder->sign(new JWT\Signer\Rsa\Sha256(), $privateKey);
+
+    $token = $builder->getToken();
+    return new Response($token, 200, ['Access-Control-Allow-Origin' => '*', 'Content-Type' => 'application/jwt']);
+});
+
 $app->get('/images', function(Request $request) use($app, $images) {
     $image = $images->find()->sort(['date' => -1]);
 
@@ -135,6 +175,19 @@ $app->get('/files/{id}', function($id) use($app, $images, $gridfs) {
     return new Response($file->getBytes(), 200, ['Content-type' => $file->file['contentType']]);
 });
 
+$app->get('/users/{id}', function($id) use($app, $images, $users) {
+    $user = $users->findOne(['_id' => new MongoId($id)]);
+
+    if ($user === null) {
+        throw new NotFoundHttpException('User not found');
+    }
+
+    unset($user['password']);
+    unset($user['_id']);
+
+    return new JsonResponse($user);
+});
+
 $app->get('/images/{name}', function($name) use($app, $images, $gridfs) {
     $image = $images->findOne(['name' => $name]);
 
@@ -144,12 +197,26 @@ $app->get('/images/{name}', function($name) use($app, $images, $gridfs) {
     return new Response($file->getBytes(), 200, ['Content-type' => $file->file['contentType']]);
 });
 
-$app->post('/images', function (Request $request) use($images, $imageForm, $gridfs) {
+$app->post('/images', function (Request $request) use($images, $imageForm, $gridfs, $publicKey) {
     $imageForm->handleRequest($request);
 
     if (!$imageForm->isValid()) {
         return new Response('Invalid form structure.', 400);
     }
+
+    $auth = $request->headers->get('Authorization');
+    if ($auth === null || substr($auth, 0, 6) !== 'Bearer') {
+        throw new UnauthorizedHttpException('Bearer');
+    }
+
+    $jwt = substr($auth, 7);
+    $token = (new JWT\Parser())->parse($jwt);
+
+    if (!$token->verify(new JWT\Signer\Rsa\Sha256(), $publicKey)) {
+        throw new BadRequestHttpException('Invalid JWT given!');
+    }
+
+    error_log(sprintf('Logged in: %s %s', $token->getClaim('given_name'), $token->getClaim('family_name')));
 
     /** @var ImageData $data */
     $data = $imageForm->getData();
@@ -171,7 +238,8 @@ $app->post('/images', function (Request $request) use($images, $imageForm, $grid
         'real' => $real_id,
         'imag' => $imag_id,
         'combined' => $combined_id,
-        'date' => new \MongoDate()
+        'date' => new \MongoDate(),
+        'user' => $token->getClaim('jti'),
     ];
     $images->insert($insert);
 

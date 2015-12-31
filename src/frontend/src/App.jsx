@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FileInputContainer from './FileInputContainer.jsx';
 import ImageListContainer from './ImageListContainer.jsx';
+import Login from './Login.jsx';
 import request from 'superagent';
 import './App.scss';
 
@@ -9,7 +10,7 @@ export class App extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { images: [] };
+        this.state = { images: [], token: null };
 
         let _this = this;
         window.setInterval(function () {
@@ -26,6 +27,14 @@ export class App extends Component {
         this.setState({images: this.state.images});
     }
 
+    handleLogin(token) {
+        this.setState({token: token});
+    }
+
+    handleLogout() {
+        this.setState({token: null});
+    }
+
     fetchImages() {
         let _this = this;
         request.get('http://localhost:1339/images').end(function(err, res) {
@@ -39,9 +48,19 @@ export class App extends Component {
 
     render() {
         return (
-            <div className='row'>
-                <ImageListContainer images={this.state.images}/>
-                <FileInputContainer handleImageAdded={this.handleImageAdded.bind(this)}/>
+            <div>
+                <nav className="navbar navbar-default navbar-fixed-top">
+                    <div className="container">
+                        <a className="navbar-brand" href="#">EvS-Demo</a>
+                        <Login token={this.state.token} onLogin={this.handleLogin.bind(this)} onLogout={this.handleLogout.bind(this)}/>
+                    </div>
+                </nav>
+                <div className="container">
+                    <div className="row">
+                        <ImageListContainer images={this.state.images}/>
+                        <FileInputContainer token={this.state.token} handleImageAdded={this.handleImageAdded.bind(this)}/>
+                    </div>
+                </div>
             </div>);
     }
 }

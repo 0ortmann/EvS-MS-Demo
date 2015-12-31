@@ -33,6 +33,7 @@ export default class FileInputContainer extends Component {
                 request
                     .post('http://localhost:1338/process/' + this.state.operator)
                     .attach('file', file, file.name)
+                    .set('Authorization', 'Bearer ' + this.props.token)
                     .end(function (err, res) {
                         if (err) {
                             console.log(err);
@@ -43,6 +44,13 @@ export default class FileInputContainer extends Component {
     }
 
     render() {
+        let submit = <div className="alert alert-warning">
+                You have to login first.
+            </div>;
+        if (this.props.token) {
+            submit = <button type="submit" className="btn btn-primary">Submit</button>;
+        }
+
         return (
             <div className="col-md-5">
                 <h2>Upload an image</h2>
@@ -61,9 +69,8 @@ export default class FileInputContainer extends Component {
                         <label htmlFor="inputFile">Image file</label>
                         <input type="file" id="inputFile" accept="image/png" name="file" onChange={this.handleFileChange.bind(this)}/>
                     </div>
-
                     <div className="form-group">
-                        <button type="submit" className="btn btn-primary">Submit</button>
+                        {submit}
                     </div>
                 </form>
             </div>);
