@@ -56,6 +56,85 @@
 \end{frame}
 
 \section{Einführung}
+
+\subsection{Eigenschaften von Microservices}
+\begin{frame}{\insertsubsection}
+	\begin{itemize}
+		\item \textbf{Kohäsion} „gleiches zu gleichem!“
+		\item \textbf{Autonomie} „le Service c'est moi!“
+		\item \textbf{Kooperation} „toll, ein anderer macht's!“
+	\end{itemize}
+\end{frame}
+
+\subsection{Abgrenzung}
+\begin{frame}{\insertsubsection}
+	\begin{itemize}
+		\item \textbf{SOA}\\
+		fehlt: gekapseltes Frontend.\\
+		hier: klare Trennung der Systeme, generische Schnittstelle durch das Web.
+		
+		\item \textbf{MAS}\\
+		fehlt: soziologische Theorie.\\
+		hier: soziotechnische Perspektive.
+		
+		\item \textbf{MOrgaS} \cite{Wester-Ebbinghaus10} \\
+		fehlt: Schachtelbarkeit und Hierarchie.\\
+		hier: Föderalismus, dezentralisierte Governance.
+	\end{itemize}
+\end{frame}
+
+\definecolor{greenc}{HTML}{00AB84}
+\definecolor{redc}{HTML}{EF3340}
+
+\def\Plus{\color{greenc}+}
+\def\Minus{\color{redc}–}
+\subsection{Für und Wider}
+\begin{frame}{\insertsubsection}
+	\begin{columns}
+		\begin{column}{.5\linewidth}
+			\centering\textbf{\textcolor{greenc}{Pro}}
+			\begin{itemize}
+				\item[\Plus] Skalierbarkeit auf Enterprise-Ebene
+				\item[\Plus] höhere Entscheidungsbefugnis für Entwickler
+				\item[\Plus] \textit{Rapid Prototyping} von Anwendungen möglich
+				\item[\Plus] schnellerer Zugang zu neuen Technologien und Programmiersprachen
+			\end{itemize}
+		\end{column}
+		\begin{column}{.5\linewidth}
+			\centering\textbf{\textcolor{redc}{Kontra}}
+			\begin{itemize}
+				\item[\Minus] hoher technischer Aufwand
+				\item[\Minus] ausführliche Absprache und gute Tests obligatorisch
+				\item[\Minus] Latenz und Overhead durch Kommunikation
+				\item[\Minus] übergreifendes System-Refactoring schwer bis unlösbar
+			\end{itemize}
+		\end{column}
+	\end{columns}
+	
+\end{frame}
+
+\subsection{Motivation: Microservices + Sicherheit}
+\begin{frame}{\insertsubsection}
+	\begin{itemize}
+		\item unabhängige, kleine Teams
+		\begin{itemize}
+			\item[$\Rightarrow$] bessere, leichtere Kommunikation
+			\item[$\Rightarrow$] effizientes Debugging und Pair-Programming
+		\end{itemize}
+		\item Unabhängigkeit der Ausführung von Services
+		\begin{itemize}
+			\item[$\Rightarrow$] Hoheit über eigene Software
+			\item[$\Rightarrow$] rasches, häufiges Deployment und schließen von Sicherheitslücken
+		\end{itemize}
+		\item einfache, generelle Schnittstelle
+		\begin{itemize}
+			\item[$\Rightarrow$] viele gut getestete Tools für die Kommunikation
+			\item[$\Rightarrow$] Skalierung leichter und schneller möglich
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+	
 \section{Microservice-Architekturen und Sicherheit}
 \section{Kommunikation und Sicherheit}
 \section{Schutzziele}
