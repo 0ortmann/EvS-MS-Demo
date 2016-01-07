@@ -1,3 +1,4 @@
+% !TeX root=../paper.tex
 \section{Schutzziele}
 \label{sec:schutzziele}
 
@@ -44,17 +45,20 @@ Ein JWT besteht aus drei Informationen: Zunächst wird ein Header übertragen, w
 
 \begin{figure}[b]
 	\centering
-	{\tt \textcolor{red}{
+	{\tt\footnotesize \textcolor{red}{
 			eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9}.\textcolor{violet}{eyJ0aG\\
 			VtYSI6Ik1pY3Jvc2VydmljZXMgdW5kIFNpY2hlcmhla\\
-			XQiLCJzZW1pbmFyIjoiS29tcG9uZW50ZW4sIEFnZW50\\
-			ZW4gdW5kIFdvcmtmbG93cyBpbiB2ZXJ0ZWlsdGVuIFN\\
-			5c3RlbWVuIn0}.\textcolor{blue}{ASG6OtMb3J30KpwY956UQYAwobI3mm\\
-			jH\_7jeUtDEBbTlJmwv632Iw9zIZCfh17h0LZrX3Bny\\
-			lJQsaF05bZLejzs-x-wbiTvQxct41Pt0mBlRGKphmK2\\
-			hMByfBsrsPbRLpcwpotESsUx6T9FmqsMOXOyBC9RVlL\\
-			z9h-6XHFg7hls}}
-	\caption{Ein \textit{JSON Web Token}. In Rot ist der Header angegeben, Violett gibt die übertragenen Daten an (Thema und Seminar dieses Aufsatzes) und in Blau ist die in \textit{RSA}-kodierte Signatur enthalten.}
+			XQiLCJtb2R1bCI6IkVudHdpY2tsdW5nIHZlcnRlaWx0\\
+			ZXIgU3lzdGVtZSIsImt1cnNuciI6IjY0LTQwMCJ9}.\textcolor{blue}{gb\\
+			0y7zl4-IIZrRdWD14UaSGPz34vXqAPecoyQVeOrntFx\\
+			PSkhryDHn2ts3Wn7XyHjli1HDdLZbqV5f1SzHNKZfz\_\\
+			Ww8Tl2xzKLURpX9QxuI2PvFQZF0bQ7PeKqmZD7OU4eI\\
+			4y9L6srzedEjsDDISbaFXTaIJp\_j1JtM9XTtEgi2Vy9\\
+			TAIZczCacnxuJgxd-Nk40k6KgnFPz1ETIu9G3JyyMxP\\
+			Enh1pw7EzIefJnRaaswC0K1evjQFK6dFvIlgXuevM3u\\
+			gZcI7lA2f1PeMud1fkZu3yaw27jeeLZRU1WiRhMV9EB\\
+			5elsYiscnpoVjuEk4C8T-p3oji43zf1IT7XvBiQ}}
+	\caption{Ein \textit{JSON Web Token}. In Rot ist der Header angegeben, Violett gibt die übertragenen Daten an (Thema und Modul dieses Aufsatzes) und in Blau ist die in \textit{RSA}-kodierte Signatur enthalten.}
 	\label{fig:jwt}
 \end{figure}
 

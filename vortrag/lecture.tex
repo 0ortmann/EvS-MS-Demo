@@ -141,12 +141,144 @@
 
 \subsection{Vertraulichkeit}
 \begin{frame}{\insertsubsection}
-	\textbf{Informationsvertraulichkeit} ist bei einem IT-System gewährleistet, wenn die darin enthaltenen Informationen \textbf{nur Befugten} zugänglich sind. Dies bedeutet, dass die sicherheitsrelevanten Elemente nur einem \textbf{definierten Personenkreis} bekannt werden. Dazu sind \textbf{Maßnahmen} zur Festlegung sowie zur Kontrolle zulässiger Informationsflüsse zwischen den Subjekten des Systems nötig (\textbf{Zugriffsschutz und Zugriffsrechte}), sodass ausgeschlossen werden kann, dass Informationen zu unautorisierten Subjekten \textbf{„durchsickern“}.
+	\begin{itemize}
+		\item Informationen nur Befugten zugänglich
+		\item Informationsflüsse festlegen und kontrollieren
+	\end{itemize}
+	\vspace*{1cm}
+	\pause
+	Vorgestellte Verfahren:
+	\begin{itemize}
+		\item \textit{OAuth}
+		\item \textit{JSON Web Tokens}
+	\end{itemize}
 \end{frame}
-\subsection{Verfügbarkeit}
-\subsection{Integrität}
 
-%http://jwt.io/introduction/
+\subsection{\em OAuth 2}
+\begin{frame}{\insertsubsection}
+	\begin{itemize}
+		\item RFC 6749 \cite{RFC6749}
+		\item ermöglicht \textit{Single Sign On}
+		\item basiert auf Web-Technologie (vor allem HTTP)
+		\item vielfach genutzt, z.B. von Google, Facebook, …
+	\end{itemize}
+\end{frame}	
+
+\begin{frame}{\insertsubsection}
+	\begin{figure}
+		\centering
+		\includegraphics[width=.52\linewidth]{img/OAuth2}
+		\caption{Protokollablauf bei OAuth 2 (übersetzt aus RFC 6749)}
+	\end{figure}
+\end{frame}
+	
+\subsection{\em JSON Web Tokens}
+\begin{frame}{\insertsubsection}
+	\begin{itemize}
+		\item RFC 7519 \cite{RFC7519}
+		\item simpler gegenüber \textit{OAuth}
+		\item jeder Client kann verifizieren
+		\item klein, daher via HTTP übertragbar
+		\item kann auch von Browsern geparsed werden
+	\end{itemize}
+\end{frame}
+	
+\begin{frame}{\insertsubsection}{}%
+
+\begin{figure}
+	\framebox[.8\linewidth]{\parbox{.75\linewidth}%
+{\color{red}\tt\footnotesize\{\\
+		\hspace*{2em}"alg": "RS256",  \textcolor{gray}{// Verschlüsselungsalgorithmus}\\
+		\hspace*{2em}"typ": "JWT" \textcolor{gray}{// „JSON Web Token“, offen für weitere}\\
+\}}}
+\caption{JWT-Header}
+\end{figure}
+
+\begin{figure}
+	\framebox[.8\linewidth]{\parbox{.75\linewidth}%
+{\color{violet}\tt\footnotesize\{\\
+		\hspace*{2em}"thema": "Microservices und Sicherheit",\\
+		\hspace*{2em}"modul": "Entwicklung verteilter Systeme",\\
+		\hspace*{2em}"kursnr": "64-400"\\
+	\}}}
+\caption{JWT-Payload}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{\insertsubsection}
+	\begin{figure}
+		{\tt \textcolor{red}{
+				eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9}.\textcolor{violet}{eyJ0aG\\
+				VtYSI6Ik1pY3Jvc2VydmljZXMgdW5kIFNpY2hlcmhla\\
+				XQiLCJtb2R1bCI6IkVudHdpY2tsdW5nIHZlcnRlaWx0\\
+				ZXIgU3lzdGVtZSIsImt1cnNuciI6IjY0LTQwMCJ9}.\textcolor{blue}{gb\\
+				0y7zl4-IIZrRdWD14UaSGPz34vXqAPecoyQVeOrntFx\\
+				PSkhryDHn2ts3Wn7XyHjli1HDdLZbqV5f1SzHNKZfz\_\\
+				Ww8Tl2xzKLURpX9QxuI2PvFQZF0bQ7PeKqmZD7OU4eI\\
+				4y9L6srzedEjsDDISbaFXTaIJp\_j1JtM9XTtEgi2Vy9\\
+				TAIZczCacnxuJgxd-Nk40k6KgnFPz1ETIu9G3JyyMxP\\
+				Enh1pw7EzIefJnRaaswC0K1evjQFK6dFvIlgXuevM3u\\
+				gZcI7lA2f1PeMud1fkZu3yaw27jeeLZRU1WiRhMV9EB\\
+				5elsYiscnpoVjuEk4C8T-p3oji43zf1IT7XvBiQ}}
+		\caption{Vollständiges \textit{JSON Web Token}}
+	\end{figure}
+\end{frame}
+
+\subsection{Integrität}
+\begin{frame}{\insertsubsection}
+	\begin{itemize}
+		\item \textbf{Datenintegrität}:\\
+			Vollständigkeit \& Korrektheit der Daten
+		\item \textbf{Systemintegrität}:\\
+			korrekte Funktionsweise des Systems
+	\end{itemize}
+	\vspace*{1cm}
+	\pause
+	Vorgestellte Verfahren:
+	\begin{itemize}
+		\item Verschlüsselung
+		\item Integrationstests
+	\end{itemize}
+\end{frame}
+
+\subsection{Integrationstests für Microservices}
+\begin{frame}{\insertsubsection}
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=.6\linewidth]{img/inte}
+		\caption{Integrationstests in einer Microservice-Architektur (Clemson, 2014)}
+		\label{fig:integrationstests}
+	\end{figure}
+\end{frame}
+
+\subsection{Verfügbarkeit}
+\begin{frame}{\insertsubsection}
+	\begin{itemize}
+		\item Systeme stets betriebsbereit
+		\item zeitgerechter Zugriff auf Daten jederzeit möglich
+	\end{itemize}
+	\vspace*{1cm}
+	\pause
+	Vorgestellte Verfahren:
+	\begin{itemize}
+		\item horizontale Skalierung \& Lastverteilung
+		\item \textit{Bakerstreet}
+	\end{itemize}
+\end{frame}
+
+
+\subsection{Horizontale Skalierung \& Lastverteilung}
+
+\subsection{\em Bakerstreet}
+\begin{frame}{\insertsubsection}
+	\begin{figure}
+		\centering
+		\includegraphics[width=.65\linewidth]{img/clientloadbal}
+		\caption{Schematische Darstellung von clientseitiger Lastverteilung (aus Li, 2015)}
+		\label{fig:clientseitige_lastverteilung}
+	\end{figure}
+\end{frame}
 
 \section{Zusammenfassung}
 
