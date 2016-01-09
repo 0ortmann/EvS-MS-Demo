@@ -1,0 +1,7 @@
+\section*{Addendum}
+
+Unter \url{https://github.com/0ortmann/EvS-MS-Demo} bieten wir eine Referenzimplementation eines Microservice Systems zu illustrativen Zwecken. Es werden 4 unterschiedliche Microservices verwendet, die miteinander interagieren. 3 der Services sind selbst implementiert. Ein autonomes Frontend, realisiert mit \textit{reactjs}\footnote{\url{https://facebook.github.io/react/}}, ein Bildverarbeitungs-Backend in Python und ein Service der das Speichern von Bildern handhabt, geschrieben in PHP. Als Speicherlösung -- die als vierter Microservice verstanden wird -- verwenden wir eine \textit{MongoDB}\footnote{\url{https://www.mongodb.org/}}. Unsere Referenzimplementation verwendet unter anderem JWT. Dockerfiles stehen zur Verfügung, um die einzelnen Services in Container zu kapseln.
+
+Im Zusammenspiel bieten all diese Microservices ein System, mit dem es einem Nutzer möglich ist über eine WebPage im Browser png-Bilder hochzuladen und einen Algorithmus zur Kantenerkennung darauf anzuwenden. Das anschließende Ergebnis wird ebenfalls in Bildform in der Datenbank gespeichert und der Nutzer erhält die Möglichkeit es im Browser anzuschauen oder herunterzuladen. 
+
+Das Beispiel macht deutlich, dass nur im Zusammenspiel aus all den Services ein sinnvolles Gesamtsystem entsteht. Weiterhin wird klar, wie eine Authentizierung via JWT umgesetzt werden kann. Dieses Beispiel ist kein Boilerplate sondern eine alleinige Refenrenzimplementation im Zuge dieser Ausarbeitung.

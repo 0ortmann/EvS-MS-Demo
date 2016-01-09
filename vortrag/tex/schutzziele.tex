@@ -14,7 +14,7 @@ Zur Einführung der drei Schutzziele ziehen wir die Definitionen von \citeauthor
 
 „Informationsvertraulichkeit ist bei einem IT-System gewährleistet, wenn die darin enthaltenen Informationen nur Befugten zugänglich sind. Dies bedeutet, dass die sicherheitsrelevanten Elemente nur einem definierten Personenkreis bekannt werden. Dazu sind Maßnahmen zur Festlegung sowie zur Kontrolle zulässiger Informationsflüsse zwischen den Subjekten des Systems nötig (Zugriffsschutz und Zugriffsrechte), sodass ausgeschlossen werden kann, dass Informationen zu unautorisierten Subjekten ‚durchsickern‘.“ \cite{Bedner+10}
 
-Für eine Microservice-Architektur betrifft dies vor allem die Kommunikation zwischen den einzelnen Microservice-Instanzen. Um diese für beide Gesprächspartner abzusichern werden zwei verschiedene Verfahren vorgestellt, zum einen die Handshake-basierte Authentifikation, bei der sich beide Gesprächspartner einander vorstellen, und die Token-basierte Authentifikation, bei welcher ein Geheimnis, ein sogenanntes „Token“, die Inhalte der Kommunikation quittieren und belegen.
+Für eine Microservice-Architektur betrifft dies vor allem die Kommunikation zwischen den einzelnen Microservice-Instanzen. Um diese für beide Gesprächspartner abzusichern werden zwei verschiedene Verfahren vorgestellt, zum einen die Handshake-basierte Authentifikation, bei der sich beide Gesprächspartner einander vorstellen, und die Token-basierte Authentifikation, bei welcher ein Geheimnis, ein sogenanntes „Token“, die Inhalte der Kommunikation quittiert und belegt.
 
 
 \subsubsection{OAuth-basierte Autorisierung}
@@ -82,7 +82,7 @@ Ein besonderes Problem, welches durch die lose Kopplung der Microservice-Instanz
 
 Eine Lösung, die sich hier anbietet, sind Verschlüsselungsverfahren. Das oben angesprochene Framework \textit{Kubernetes} beispielsweise verteilt unter allen Knoten Zertifikate, die ausschließlich im Container-Netzwerk bekannt sind. So können HTTPS-Verbindungen zwischen den Microservice-Instanzen hergestellt werden, die dank AES-Verschlüsselung nicht mehr abgehört oder manipuliert werden können.
 
-Weitere Protokolle, um komplexeren Anforderungen zu genügen, sind das verschlüsselte \textit{WebSocket}-Protokoll WSS oder das sicheres FTP, sprich SFTP. Eine Verbindung via \textit{WebSockets} bietet ohnehin die Möglichkeit an, vor dem Senden der Daten eine Verschlüsselung zu installieren. Allerdings ist hier zu beachten, dass diese im Browser zurückverfolgt werden kann. Eine SFTP-Verbindung funktioniert über das SSH-Protokoll, welches verschiedene Möglichkeiten zur sicheren Kommunikation bietet; etwa auch wie bei JWT mit einem Schlüsselpaar aus öffentlichem und privatem Schlüssel.
+Weitere Protokolle, um komplexeren Anforderungen zu genügen, sind das verschlüsselte \textit{WebSocket}-Protokoll WSS oder das sichere FTP, sprich SFTP. Eine Verbindung via \textit{WebSockets} bietet ohnehin die Möglichkeit an, vor dem Senden der Daten eine Verschlüsselung zu installieren. Allerdings ist hier zu beachten, dass diese im Browser zurückverfolgt werden kann. Eine SFTP-Verbindung funktioniert über das SSH-Protokoll, welches verschiedene Möglichkeiten zur sicheren Kommunikation bietet; etwa auch wie bei JWT mit einem Schlüsselpaar aus öffentlichem und privatem Schlüssel.
 
 \subsubsection{Systemintegrität}
 
@@ -125,7 +125,7 @@ Haben wir mehrere Instanzen eines Microservices, benötigen wir einen Entscheide
 	\item Wir können die Last auch abhängig von der \textbf{Auslastung} eines jeweiligen Knoten verteilen. Dazu fragt die Lastverteilung die in Betracht gezogenen Knoten regelmäßig, wie viele Aufträge diese zur Zeit bearbeiten und weist ihnen dementsprechend weitere zu. Problematisch bei diesem Verfahren ist, dass es zusätzliche last erzeugt und technisch anspruchsvoller als die beiden zuvor erklärten Strategien ist.
 \end{itemize}
 
-Lastverteilung ermöglicht es der Architektur, mehrere Instanzen eines Microservices zu verwenden. Wie auch immer ist dabei zu erwähnen, dass wir einen neuen Flaschenhals erzeugen, da jegliche Microservice-Zugriffe zunächst der Lastverteilung anvertraut werden. Dies stellt einen sogenannten \textit{„Single Point of Failure“} dar. Im Folgenden zeigen wir daher eine Verbesserung des oben genannten Prinzips auf.
+Lastverteilung ermöglicht es der Architektur, mehrere Instanzen eines Microservices zu verwenden. Dabei ist zu erwähnen, dass wir einen neuen Flaschenhals erzeugen, da jegliche Microservice-Zugriffe zunächst der Lastverteilung anvertraut werden. Dies stellt einen sogenannten \textit{„Single Point of Failure“} dar. Im Folgenden zeigen wir daher eine Verbesserung des oben genannten Prinzips auf.
 
 \subsubsection{Clientseitige Lastverteilung}
 
@@ -140,7 +140,7 @@ In dem Blog-Beitrag \cite{Li15} wird ein neuartiger Ansatz motiviert, welcher di
 
 Abhilfe für dieses Problem stellt der folgende clientseitige Lastverteilungsdienst dar. Diese funktioniert so, dass jeder Microservice, welcher auf die Dienste anderer angewiesen ist, über seine eigene Lastverteilung verfügt. Ein solcher Aufbau ist in \autoref{fig:clientseitige_lastverteilung} schematisiert: Ein Microservice verfügt über seinen eigenen \textit{Load Balancer}, an welchen er seine ausgehende Kommunikation exklusiv leitet. Dieser kennt alle anderen Microservice-Instanzen und kann daher Nachrichten an diese weiterleiten.
 
-Die von \citeauthor{Li15} entwickelte Grundstruktur \textit{„Baker Street“}\footnote{\textit{Baker Street} ist unter Apache-Lizenz 2 veröffentlichte freie Software, siehe \url{http://bakerstreet.io/}.} ist eine Umsetzung dieser Architektur. Kern dieser sind drei folgenden Komponenten.
+Die von \citeauthor{Li15} entwickelte Grundstruktur \textit{„Baker Street“}\footnote{\textit{Baker Street} ist unter Apache-Lizenz 2 veröffentlichte freie Software, siehe \url{http://bakerstreet.io/}.} ist eine Umsetzung dieser Architektur. Kern dieser sind die drei folgenden Komponenten.
 
 \begin{itemize}
 	\item Der \textit{HAProxy}-basierte \textit{Load Balancer} \textbf{Sherlock} welcher lokal jeder Microservice-Instanz beiwohnt. Er findet heraus, wohin Verbindungen von dieser Instanz wandern sollen.
