@@ -156,6 +156,9 @@
 
 \subsection{\em OAuth 2}
 \begin{frame}{\insertsubsection}
+	\centering
+	\includegraphics[width=.3\linewidth]{img/oauth}
+	\vspace*{12pt}
 	\begin{itemize}
 		\item RFC 6749 \cite{RFC6749}
 		\item ermöglicht \textit{Single Sign On}
@@ -174,6 +177,9 @@
 	
 \subsection{\em JSON Web Tokens}
 \begin{frame}{\insertsubsection}
+	\centering
+	\includegraphics[width=.5\linewidth]{img/jwt}
+	\vspace*{12pt}
 	\begin{itemize}
 		\item RFC 7519 \cite{RFC7519}
 		\item simpler gegenüber \textit{OAuth}
@@ -242,6 +248,32 @@
 	\end{itemize}
 \end{frame}
 
+\subsection{Verschlüsselte Protokolle}
+\begin{frame}{\insertsubsection}
+	\begin{itemize}
+		\item \textbf{HTTPS} – \textit{HyperText Transport Protocol Secure}
+		\begin{itemize}
+			\item RFC 2818
+			\item sichere Übertragung von Daten + Informationen
+		\end{itemize}
+		\item \textbf{WSS} – \textit{WebSockets Secure}
+		\begin{itemize}
+			\item RFC 6455
+			\item sichere und schnelle Übertragung von Daten in einem Socket
+		\end{itemize}
+		\item \textbf{SSH} – \textit{Secure Shell}
+		\begin{itemize}
+			\item RFC 42\{50-56\}
+			\item sichere entfernte Ausführung via RSA und AES
+		\end{itemize}
+		\item \textbf{SFTP} – \textit{SSH File Transfer Protocol}
+		\begin{itemize}
+			\item (Working draft)
+			\item sichere Übertragung von Dateien
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
 \subsection{Integrationstests für Microservices}
 \begin{frame}{\insertsubsection}
 	\begin{figure}[h]
@@ -263,14 +295,99 @@
 	Vorgestellte Verfahren:
 	\begin{itemize}
 		\item horizontale Skalierung \& Lastverteilung
-		\item \textit{Bakerstreet}
+		\item \textit{Baker Street}
 	\end{itemize}
 \end{frame}
 
 
 \subsection{Horizontale Skalierung \& Lastverteilung}
 
-\subsection{\em Bakerstreet}
+\begin{frame}{\insertsubsection}
+	\begin{columns}[T]
+		\begin{column}{.5\textwidth}
+			\centering
+			\includegraphics[width=.6\textwidth, page=2]{img/scale-up-out.pdf}
+			
+			\textbf{\large\color{leuchtrot} Scale Up}
+			
+			\textit{„größere Box“}
+			\begin{itemize}
+				\item Hardwarekapazität erweitern (CPU, RAM, …)
+				\item einfach \& günstig
+				\item \textit{Single Point of Failure}
+				\item unterliegende Software muss auch skalieren
+			\end{itemize}
+		\end{column}
+		\begin{column}{.5\textwidth}
+			\centering
+			\includegraphics[width=.6\textwidth, page=1]{img/scale-up-out.pdf}
+			
+			\textbf{\large\color{leuchtrot} Scale Out}
+			
+			\textit{„mehr Boxen“}
+			\begin{itemize}
+				\item mehr Server hinzufügen und Lastverteilung
+				\item schützt vor Hardwarefehlern
+				\item leicht für die Microservice-Architektur!
+			\end{itemize}
+		\end{column}
+	\end{columns}
+	\vfill
+	\hfill{\footnotesize\cite{Meier+08}}
+\end{frame}
+	
+\begin{frame}{Arten von Lastverteilung}
+	\begin{itemize}[<+->]
+		\item \textbf{Zufall} 
+		\begin{itemize}
+			\item einen zufälligen Knoten wählen
+			\item sehr simpel, aber asymmetrisch
+		\end{itemize}
+		\item \textbf{Sharding} 
+		\begin{itemize}
+			\item Knoten auf Basis eines Indexes wählen
+			\item bei guter Schlüsselwahl symmetrisch
+		\end{itemize}
+		\item \textbf{Auslastung} 
+		\begin{itemize}
+			\item Knoten mit geringster Auslastung wählen
+			\item zusätzliche Belastung der Knoten
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\subsection{\em Baker Street}
+\begin{frame}{\insertsubsection}
+	\centering
+	\includegraphics[width=\linewidth]{img/bakerstreet}
+	\begin{itemize}
+		\item Open-Source-Projekt von 2015
+		\item \url{http://bakerstreet.io/}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{\insertsubsection}
+	\begin{itemize}[<+->]
+		\item \textbf{Sherlock} 
+		\begin{itemize}
+			\item \textit{HAProxy}-basierter \textit{Load Balancer}
+			\item lokal, findet andere Knoten
+		\end{itemize}
+		\item \textbf{Watson} 
+		\begin{itemize}
+			\item \textit{Health Checker}, prüft Zustand des Microservices 
+			\item übernimmt Anmeldung
+		\end{itemize}
+		\item \textbf{Datawire-Verzeichnis} 
+		\begin{itemize}
+			\item globale Diensterkennung
+			\item leitet Nachrichten von \textbf{Watson} an \textbf{Sherlock} weiter
+		\end{itemize}
+	\end{itemize}
+	\vfill
+	\hfill{\footnotesize\cite{Li15}}
+\end{frame}
+
 \begin{frame}{\insertsubsection}
 	\begin{figure}
 		\centering
