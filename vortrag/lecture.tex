@@ -9,6 +9,27 @@
 \usepackage{array}
 \usepackage{fontawesome}
 
+% taken from http://tex.stackexchange.com/questions/45912/box-around-a-few-items-in-an-itemize-environment
+
+\usepackage{xparse}%  For \NewDocumentCommand
+\usepackage{calc}%    For the \widthof macro
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \node (#1) {};}
+
+\NewDocumentCommand{\DrawBoxWide}{s O{}}{%
+    \tikz[overlay,remember picture]{
+    \IfBooleanTF{#1}{%
+        \coordinate (RightPoint) at ($(left |- right)+(\linewidth-\labelsep-\labelwidth,0.0)$);
+    }{%
+        \coordinate (RightPoint) at (right.east);
+    }%
+    \draw[red,#2]
+      ($(left)+(-\labelwidth,0.9em)$) rectangle
+      ($(RightPoint)+(0.2em,-0.3em)$);}
+}
+
 \setsansfont{Calibri}
 \setdefaultlanguage{german}
 \usetheme{UHH}
@@ -137,7 +158,108 @@
 
 	
 \section{Microservice-Architekturen und Sicherheit}
+
+\subsection{Technologien zur Realisierung von MS}
+\begin{frame}{\insertsubsection}
+	\begin{itemize}
+		\setlength\itemsep{2em}
+		\item Köhasion, Autonomie, Kooperation wahren und unterstützen
+		\item Softwaretechnisch: \textit{Isolation} \& \textit{Kapselung}
+		\item Virtuelle Maschinen
+		\item Container
+	\end{itemize}
+\end{frame}
+
+\subsection{VMs \& Container}
+\begin{frame}{\insertsubsection}
+	Virtuelle Maschine
+	\begin{itemize}
+		\setlength\itemsep{1em}
+		\item Isoliert Anwendung(en)
+		\item „Sandboxed“ Execution Environment
+		\item Anwendung $\approx$ VM-Image $\rightarrow$ Replizierbar
+		\item „Schwer“
+		\begin{itemize}
+			\item[$\Rightarrow$] beinhaltet eigene Libs und Gast-Betriebssystem
+			\item[$\Rightarrow$] Images meist groß
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\subsection{VMs \& Container}
+\begin{frame}{\insertsubsection}
+	Container (insb. Docker)
+	\begin{itemize}
+		\setlength\itemsep{1em}
+		\item Isoliert genau eine Anwendung
+		\item \textit{Namespaces}, \textit{Network Interfaces}, \textit{Cgroups}
+		\item Replikation via Dockerfile oder Image
+		\item „Leicht“
+		\begin{itemize}
+			\item[$\Rightarrow$] beinhaltet nur App und Abhängigkeiten
+			\item[$\Rightarrow$] Images klein
+			\item[$\Rightarrow$] Ausführung: 1 Prozess
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\subsection{VMs \& Container}
+\begin{frame}{\insertsubsection}
+	\centering
+	\includegraphics[width=\linewidth]{img/container-vm.pdf}
+\end{frame}
+
+\subsection{Microservice Systeme}
+\begin{frame}{\insertsubsection}
+	\begin{itemize}
+		\item Zusammenspiel vieler Microservices
+		\item „Viele bewegliche Teile“ $\rightarrow$ neue Probleme:
+		\vspace*{1em}
+		\begin{enumerate}
+			\setlength{\itemindent}{7em}
+			\setlength\itemsep{0.5em}
+			\item \tikzmark{left}Service Discovery
+			\item Erreichbarkeitsüberwachung
+			\item Skalierbarkeit
+			\item Loadbalancing
+			\item Deployment
+			\item Replizier- \& Portier \& Ersetzbarkeit 
+			\item Kommunikationssicherheit
+			\item Verhaltensüberwachung (Logging)\tikzmark{right}
+		\end{enumerate}
+		\DrawBoxWide[thick, blue, fill=yellow, fill opacity=0.2]
+	\end{itemize}
+\end{frame}
+
+\subsection{Kubernetes}
+\begin{frame}{\insertsubsection}
+	\textit{„Kubernetes is an open-source platform for automating deployment, scaling, and operations of application containers across clusters of hosts.“}\cite{k8sdoc}
+	\vspace{1em}
+	\begin{itemize}
+		\setlength\itemsep{1em}
+		\item Löst obige Problemstellungen 1-7
+		\item Abstrahiert Lösung, um mit Docker Containern MS Systeme zu realisieren
+	\end{itemize}
+\end{frame}
+
+\subsection{Kubernetes}
+\begin{frame}{\insertsubsection}
+	\begin{itemize}
+		\setlength\itemsep{1em}
+		\item Pods
+		\item Services
+		\item Replication Controller
+	\end{itemize}
+	\vspace{1em}
+	\includegraphics[width=\linewidth]{img/pods-getting-ready-k8s.pdf}
+\end{frame}
+		
 \section{Kommunikation und Sicherheit}
+
+
+
+
+
 \section{Schutzziele}
 
 \subsection{Vertraulichkeit}
