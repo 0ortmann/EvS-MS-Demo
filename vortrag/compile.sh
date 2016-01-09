@@ -1,6 +1,6 @@
-xelatex paper.tex
-bibtex paper
-xelatex paper.tex
-bibtex paper
-xelatex paper.tex
-xelatex paper.tex
+xelatex $1
+bibtex $1
+xelatex $1
+bibtex $1
+xelatex $1
+xelatex $1
