@@ -8,6 +8,7 @@
 \usepackage{xspace}
 \usepackage{array}
 \usepackage{fontawesome}
+\usepackage[normalem]{ulem}
 
 % taken from http://tex.stackexchange.com/questions/45912/box-around-a-few-items-in-an-itemize-environment
 
@@ -165,8 +166,8 @@
 		\setlength\itemsep{2em}
 		\item Köhasion, Autonomie, Kooperation wahren und unterstützen
 		\item Softwaretechnisch: \textit{Isolation} \& \textit{Kapselung}
-		\item Virtuelle Maschinen
-		\item Container
+		\item System formen aus einzelnen „Bausteinen“
+		\item Virtuelle Maschinen \& Container
 	\end{itemize}
 \end{frame}
 
@@ -216,7 +217,7 @@
 		\item „Viele bewegliche Teile“ $\rightarrow$ neue Probleme:
 		\vspace*{1em}
 		\begin{enumerate}
-			\setlength{\itemindent}{7em}
+			\setlength{\itemindent}{6em}
 			\setlength\itemsep{0.5em}
 			\item \tikzmark{left}Service Discovery
 			\item Erreichbarkeitsüberwachung
@@ -228,13 +229,18 @@
 			\item Verhaltensüberwachung (Logging)\tikzmark{right}
 		\end{enumerate}
 		\DrawBoxWide[thick, blue, fill=yellow, fill opacity=0.2]
+		\item „Orchestration“: K8s, Mesos, ECS, Azure ...
 	\end{itemize}
 \end{frame}
 
 \subsection{Kubernetes}
 \begin{frame}{\insertsubsection}
+	\centering
+	\includegraphics[width=.3\linewidth]{img/kubernetes_logo.png}
+	\vspace*{1em}
+
 	\textit{„Kubernetes is an open-source platform for automating deployment, scaling, and operations of application containers across clusters of hosts.“}\cite{k8sdoc}
-	\vspace{1em}
+	\vspace*{1em}	
 	\begin{itemize}
 		\setlength\itemsep{1em}
 		\item Löst obige Problemstellungen 1-7
@@ -256,9 +262,72 @@
 		
 \section{Kommunikation und Sicherheit}
 
+\subsection{Kommunikationsbedarf}
+\begin{frame}{\insertsubsection}
+	\begin{itemize}
+		\setlength\itemsep{1em}
+		\item „System“ $\rightarrow$ Vernetzung der Microservices
+		\item Orchestration Tools versuchen, das Problem zu adressieren
+		\item Kommunikation fast immer Event-basiert
+		\item Technologien: REST \& Message Queues
+		\item Problem: Unsichere Kanäle
+	\end{itemize}
+\end{frame}
+
+\subsection{REST}
+\begin{frame}{\insertsubsection}
+	\begin{itemize}
+		\setlength\itemsep{1em}
+		\item „Representational State Transfer“
+		\item Request / Response (HTTP)
+		\item Synchron -- Gesprächspartner bekannt
+		\item Abhörbar, manipulierbar, offene APIs
+		\item HTTP/s $\rightarrow$ \sout{Abhörbar, manipulierbar} \emph{offene APIs}
+		\item Authentication an API + HTTP/s -- Mindestsicherheit nach \cite{newman2015}
+	\end{itemize}
+\end{frame}
+
+\subsection{Message Queues}
+\begin{frame}{\insertsubsection}
+	\begin{itemize}
+		\setlength\itemsep{2em}
+		\item Asynchron \& indirekt -- Empfänger evtl. unbekannt
+		\item Bessere Skalierbarkeit, Worker-Chains
+		\item Transport von/zu Queue unsicher
+		\item RabbitMQ, ZeroMQ
+	\end{itemize}
+\end{frame}
+
+\subsection{System Sandboxing}
+\begin{frame}{\insertsubsection}
+	\begin{itemize}
+		\setlength\itemsep{2em}
+		\item Gesamtsystem hinter Firewall
+		\item Subnetze verwenden
+		\item Keine Schnittstelle zum WWW
+		\item Verlagert den Angriffsvektor, eliminiert ihn nicht!
+	\end{itemize}
+\end{frame}
 
 
-
+\subsection{Validierung und Verifikation}
+\begin{frame}{\insertsubsection}
+	\begin{itemize}
+		\setlength\itemsep{1em}
+		\item Grobe Maßnamen:
+		\begin{itemize}
+			\item[$\Rightarrow$] Geteiltes JSON Schema
+			\item[$\Rightarrow$] Hashing des Inhalts
+			\item[$\Rightarrow$] Identifikation des Absenders
+		\end{itemize}
+		\item Im Detail: 
+		\begin{itemize}
+			\item[$\Rightarrow$] Pro Anwendungsfall Schutzziele definieren
+			\item[$\Rightarrow$] Passende Technologie pro Schutzziel
+			\item[$\Rightarrow$] Erhöhter Implementationsaufwand wenn richtig gemacht
+		\end{itemize}
+	\end{itemize}
+\end{frame}
 
 \section{Schutzziele}
 
