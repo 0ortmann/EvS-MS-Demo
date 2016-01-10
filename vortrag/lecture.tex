@@ -165,9 +165,9 @@
 	\begin{itemize}
 		\setlength\itemsep{2em}
 		\item Köhasion, Autonomie, Kooperation wahren und unterstützen
-		\item Softwaretechnisch: \textit{Isolation} \& \textit{Kapselung}
+		\item softwaretechnisch: \textit{Isolation} \& \textit{Kapselung}
 		\item System formen aus einzelnen „Bausteinen“
-		\item Virtuelle Maschinen \& Container
+		\item virtuelle Maschinen \& Container
 	\end{itemize}
 \end{frame}
 
@@ -176,10 +176,10 @@
 	Virtuelle Maschine
 	\begin{itemize}
 		\setlength\itemsep{1em}
-		\item Isoliert Anwendung(en)
-		\item „Sandboxed“ Execution Environment
+		\item isoliert Anwendung(en)
+		\item „sandboxed“ Execution Environment
 		\item Anwendung $\approx$ VM-Image $\rightarrow$ Replizierbar
-		\item „Schwer“
+		\item „schwer“
 		\begin{itemize}
 			\item[$\Rightarrow$] beinhaltet eigene Libs und Gast-Betriebssystem
 			\item[$\Rightarrow$] Images meist groß
@@ -192,10 +192,10 @@
 	Container (insb. Docker)
 	\begin{itemize}
 		\setlength\itemsep{1em}
-		\item Isoliert genau eine Anwendung
+		\item isoliert genau eine Anwendung
 		\item \textit{Namespaces}, \textit{Network Interfaces}, \textit{Cgroups}, \textit{Chroots}
 		\item Replikation via Dockerfile oder Image
-		\item „Leicht“
+		\item „leicht“
 		\begin{itemize}
 			\item[$\Rightarrow$] beinhaltet nur App und Abhängigkeiten
 			\item[$\Rightarrow$] Images klein
@@ -214,7 +214,7 @@
 \begin{frame}{\insertsubsection}
 	\begin{itemize}
 		\item Zusammenspiel vieler Microservices
-		\item „Viele bewegliche Teile“ $\rightarrow$ neue Probleme:
+		\item „viele bewegliche Teile“ $\rightarrow$ neue Probleme:
 		\vspace*{1em}
 		\begin{enumerate}
 			\setlength{\itemindent}{6em}
@@ -222,14 +222,14 @@
 			\item \tikzmark{left}Service Discovery
 			\item Erreichbarkeitsüberwachung
 			\item Skalierbarkeit
-			\item Loadbalancing
+			\item Load Balancing
 			\item Deployment
 			\item Replizier- \& Portier \& Ersetzbarkeit 
 			\item Kommunikationssicherheit
 			\item Verhaltensüberwachung (Logging)\tikzmark{right}
 		\end{enumerate}
 		\DrawBoxWide[thick, blue, fill=yellow, fill opacity=0.2]
-		\item „Orchestration“: K8s, Mesos, ECS, Azure ...
+		\item „Orchestration“: \textit{K8s}, \textit{Mesos}, \textit{ECS}, \textit{Azure} ...
 	\end{itemize}
 \end{frame}
 
@@ -243,8 +243,8 @@
 	\vspace*{1em}	
 	\begin{itemize}
 		\setlength\itemsep{1em}
-		\item Löst obige Problemstellungen 1-7
-		\item Abstrahiert Lösung, um mit Docker Containern MS Systeme zu realisieren
+		\item löst obige Problemstellungen 1-7
+		\item abstrahiert Lösung, um mit Docker Containern MS Systeme zu realisieren
 	\end{itemize}
 \end{frame}
 
@@ -267,45 +267,45 @@
 	\begin{itemize}
 		\setlength\itemsep{1em}
 		\item „System“ $\rightarrow$ Vernetzung der Microservices
-		\item Orchestration Tools versuchen, das Problem zu adressieren
+		\item \textit{Orchestration Tools} versuchen, das Problem zu adressieren
 		\item Kommunikation fast immer Event-basiert
 		\item Technologien: REST \& Message Queues
 		\item Problem: Unsichere Kanäle
 	\end{itemize}
 \end{frame}
 
-\subsection{REST}
+\subsection{\em RESTful APIs}
 \begin{frame}{\insertsubsection}
 	\begin{itemize}
 		\setlength\itemsep{1em}
 		\item „Representational State Transfer“
 		\item Request / Response (HTTP)
-		\item Synchron -- Gesprächspartner bekannt
-		\item Abhörbar, manipulierbar, offene APIs
-		\item HTTP/s $\rightarrow$ \sout{Abhörbar, manipulierbar} \emph{offene APIs}
-		\item Authentication an API + HTTP/s -- Mindestsicherheit nach \cite{newman2015}
+		\item synchron -- Gesprächspartner bekannt
+		\item abhörbar, manipulierbar, offene APIs
+		\item HTTPS $\rightarrow$ \sout{abhörbar, manipulierbar} \emph{offene APIs}
+		\item Authentifizierung an API + HTTPS -- Mindestsicherheit nach \cite{newman2015}
 	\end{itemize}
 \end{frame}
 
-\subsection{Message Queues}
+\subsection{\em Message Queues}
 \begin{frame}{\insertsubsection}
 	\begin{itemize}
 		\setlength\itemsep{2em}
-		\item Asynchron \& indirekt -- Empfänger evtl. unbekannt
-		\item Bessere Skalierbarkeit, Worker-Chains
+		\item asynchron \& indirekt -- Empfänger evtl. unbekannt
+		\item bessere Skalierbarkeit, Worker-Chains
 		\item Transport von/zu Queue unsicher
-		\item RabbitMQ, ZeroMQ
+		\item \textit{RabbitMQ}, \textit{ZeroMQ}
 	\end{itemize}
 \end{frame}
 
-\subsection{System Sandboxing}
+\subsection{\em System Sandboxing}
 \begin{frame}{\insertsubsection}
 	\begin{itemize}
 		\setlength\itemsep{2em}
 		\item Gesamtsystem hinter Firewall
 		\item Subnetze verwenden
-		\item Keine Schnittstelle zum WWW
-		\item Verlagert den Angriffsvektor, eliminiert ihn nicht!
+		\item keine Schnittstelle zum WWW
+		\item verlagert den Angriffsvektor, eliminiert ihn nicht!
 	\end{itemize}
 \end{frame}
 
