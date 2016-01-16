@@ -81,12 +81,27 @@
 
 \subsection{Eigenschaften von Microservices}
 \begin{frame}{\insertsubsection}
-	\begin{itemize}
-		\setlength\itemsep{2em}
-		\item \textbf{Kohäsion} „gleiches zu gleichem!“
-		\item \textbf{Autonomie} „le Service c'est moi!“
-		\item \textbf{Kooperation} „toll, ein anderer macht's!“
-	\end{itemize}
+	\begin{columns}[T]
+		\begin{column}{.33\linewidth}
+			\centering
+			\includegraphics[width=.8\linewidth,page=1]{img/features}\\
+			„gleiches zu gleichem!“
+		\end{column}
+		\begin{column}{.33\linewidth}
+			\only<2->{
+			\centering
+			\includegraphics[width=.8\linewidth,page=2]{img/features}\\
+			„le Service c'est moi!“}
+		\end{column}
+		\begin{column}{.33\linewidth}
+			\only<3->{
+			\centering
+			\includegraphics[width=.8\linewidth,page=3]{img/features}\\
+			„toll, ein anderer macht's!“}
+		\end{column}
+	\end{columns}
+	\vfill
+	\hfill{\footnotesize\cite{Fowler+14}}
 \end{frame}
 
 \subsection{Abgrenzung}
